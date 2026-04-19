@@ -7,8 +7,9 @@ import { CommandPalette } from './components/CommandPalette'
 import { ModeStack } from './components/ModeStack'
 import { ModeFeed } from './components/ModeFeed'
 import { ModeArcade } from './components/ModeArcade'
+import { ModeMock } from './components/ModeMock'
 
-type Mode = 'stack' | 'feed' | 'arcade'
+type Mode = 'stack' | 'feed' | 'arcade' | 'mock'
 type Theme = 'dark' | 'paper'
 type Sort = 'default' | 'shuffle' | 'difficulty'
 
@@ -207,6 +208,9 @@ function App() {
           <button className={mode === 'arcade' ? 'active' : ''} onClick={() => setMode('arcade')}>
             Arcade
           </button>
+          <button className={mode === 'mock' ? 'active' : ''} onClick={() => setMode('mock')}>
+            Mock
+          </button>
         </div>
       </div>
 
@@ -242,6 +246,17 @@ function App() {
             rate={rate}
             categories={CATEGORIES}
             showAnswerDefault={false}
+          />
+        )}
+        {mode === 'mock' && (
+          <ModeMock
+            cards={filteredCards}
+            idx={idx}
+            setIdx={setIdx}
+            progress={progress}
+            toggleReviewed={toggleReviewed}
+            rate={rate}
+            categories={CATEGORIES}
           />
         )}
       </div>
