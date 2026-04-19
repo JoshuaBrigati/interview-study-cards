@@ -566,4 +566,139 @@ const handleSelect = useCallback((id: string) => {
 }`,
     takeaway: 'Array interview questions usually reward clarity over cleverness.',
   },
+  {
+    id: 'web3-wallet-connection-flow',
+    type: 'qa',
+    category: 'Web3',
+    difficulty: 2,
+    minutes: 3,
+    question: 'How do you think about wallet connection flow in a frontend app?',
+    shortAnswer:
+      'I think about it as a UX state machine: disconnected, connecting, connected, wrong network, signing, and error states. The goal is to make those states explicit and trustworthy instead of treating wallet connection like a single button click.',
+    deepAnswer:
+      'Wallet connection is not just “click connect.” It involves provider availability, user approval, account state, chain state, rejected requests, and sometimes mobile wallet quirks. A good frontend makes these states visible and predictable, because users are dealing with money and trust-sensitive actions. I want the UI to distinguish between disconnected, connected but wrong chain, signing, pending transaction, and failed/rejected states. If the app treats all of that as one vague connected state, users lose confidence fast.',
+    takeaway: 'Wallet UX is really state management plus trust design.',
+  },
+  {
+    id: 'web3-chain-switching',
+    type: 'qa',
+    category: 'Web3',
+    difficulty: 2,
+    minutes: 2,
+    question: 'How do you handle chain switching in a web3 app?',
+    shortAnswer:
+      'I treat wrong-chain state explicitly in the UI and guide the user toward switching, rather than letting actions fail mysteriously. The app should know what chain it expects and surface that clearly before the user tries to transact.',
+    deepAnswer:
+      'Chain switching is both a technical and UX problem. Technically, the app needs to know the active chain and whether the wallet matches the expected environment. From a UX perspective, the app should not wait until a write fails to tell the user they are on the wrong chain. I prefer to surface wrong-network state early, provide a clear switch action when possible, and handle rejection/errors cleanly if the wallet refuses or the chain is not available. Interviewers usually want to hear that you think beyond the happy path.',
+    takeaway: 'Wrong-network state should be first-class, not an afterthought.',
+  },
+  {
+    id: 'web3-transaction-lifecycle',
+    type: 'qa',
+    category: 'Web3',
+    difficulty: 3,
+    minutes: 4,
+    question: 'How do you think about transaction lifecycle in the frontend?',
+    shortAnswer:
+      'I treat it as multiple explicit states: preparing, awaiting signature, submitted, pending confirmation, confirmed, and failed. Users need to know exactly where they are in that flow.',
+    deepAnswer:
+      'A common mistake is collapsing the whole transaction lifecycle into “loading” and “done.” That hides what is actually happening and makes the app feel untrustworthy. The user needs to know whether they are being asked to sign, whether the transaction was submitted to the network, whether it is still pending, and whether final confirmation happened. Frontends should also distinguish rejection by the user from network failure or onchain failure. In a money or web3 product, transaction clarity is a core UX requirement, not polish.',
+    sampleCode: `type TxState =
+  | 'idle'
+  | 'awaiting-signature'
+  | 'submitted'
+  | 'confirming'
+  | 'confirmed'
+  | 'failed'`,
+    takeaway: 'Transaction UX should make the lifecycle explicit, not vague.',
+  },
+  {
+    id: 'web3-optimistic-ui',
+    type: 'qa',
+    category: 'Web3',
+    difficulty: 2,
+    minutes: 3,
+    question: 'Would you use optimistic UI in a web3 app?',
+    shortAnswer:
+      'Sometimes, but carefully. I would use optimism more for low-risk UI feedback than for pretending an onchain action is final before confirmation. In trust-sensitive flows, clarity beats fake speed.',
+    deepAnswer:
+      'Optimistic UI can make an app feel faster, but onchain actions are messy because submission is not the same as confirmation. I might optimistically reflect a local pending state, disable duplicate actions, or show the user that their intent has been captured. But I would not present a transaction as final just because the wallet call returned. In web3 and money-adjacent products, I care more about making pending state clear than making the UI look artificially fast.',
+    takeaway: 'Optimism is fine for intent/pending state, not for pretending settlement already happened.',
+  },
+  {
+    id: 'web3-rpc-failures',
+    type: 'qa',
+    category: 'Web3',
+    difficulty: 2,
+    minutes: 3,
+    question: 'How do you handle RPC failures or unreliable chain reads?',
+    shortAnswer:
+      'I assume they will happen. The frontend should handle retries, stale data messaging, and degraded states cleanly instead of pretending the chain is always available.',
+    deepAnswer:
+      'RPC failures are normal enough that the UI should be designed around them. Reads can fail, lag, or disagree across providers, so I want clear loading and retry behavior, plus a good sense of when the displayed data was last updated. Depending on the product, I might want multiple providers, caching, or fallback reads. Most importantly, I do not want silent failure or confusing empty states that look like real data. The question is not whether failures happen, but whether the app handles them like an adult.',
+    takeaway: 'Chain reliability is a product concern, not just an infra concern.',
+  },
+  {
+    id: 'web3-indexer-vs-direct-read',
+    type: 'qa',
+    category: 'Web3',
+    difficulty: 3,
+    minutes: 4,
+    question: 'When would you use an indexer vs direct onchain reads?',
+    shortAnswer:
+      'Direct reads are great for simple, current onchain data. Indexers make more sense when you need historical views, aggregation, search, richer queryability, or better performance across large datasets.',
+    deepAnswer:
+      'Direct reads are appealing because they are simple and close to the source of truth, but they do not scale well for complex history views, leaderboard-style queries, or anything requiring cross-entity aggregation. Indexers are valuable when the product needs richer query patterns, denormalized data, or fast historical exploration. The tradeoff is that indexers add infrastructure and potential lag behind chain truth. A strong answer shows you understand that this is a product/data-shape tradeoff, not just a technical preference.',
+    takeaway: 'Use direct reads for simple live chain access. Use indexers when the product needs history, aggregation, or fast queryability.',
+  },
+  {
+    id: 'web3-contract-hooks-architecture',
+    type: 'qa',
+    category: 'Web3',
+    difficulty: 2,
+    minutes: 3,
+    question: 'How would you structure contract reads and writes in a React app?',
+    shortAnswer:
+      'I usually want a clean boundary between low-level contract interaction and UI components. Components should consume hooks or domain helpers rather than embedding raw contract logic everywhere.',
+    deepAnswer:
+      'If every component calls raw contract functions directly, the codebase gets repetitive and fragile quickly. I prefer a small contract/domain layer or custom hooks that standardize reads, writes, parameter formatting, error handling, and lifecycle state. Then UI components can focus on rendering and interaction instead of knowing every contract detail. That also makes future migrations, testing, and consistency much easier.',
+    takeaway: 'Push raw contract details down into reusable hooks or domain utilities.',
+  },
+  {
+    id: 'drill-format-transaction-state',
+    type: 'drill',
+    category: 'Drills',
+    difficulty: 2,
+    minutes: 4,
+    prompt: 'Model a simple transaction state machine for a frontend and list the states you would track.',
+    hint1: 'Think beyond loading/success/error.',
+    hint2: 'Include user rejection and pending confirmation separately.',
+    answer: `type TransactionState =
+  | 'idle'
+  | 'awaiting-signature'
+  | 'rejected'
+  | 'submitted'
+  | 'confirming'
+  | 'confirmed'
+  | 'failed'`,
+    takeaway: 'Money-adjacent UX gets much better when the lifecycle is explicit.',
+  },
+  {
+    id: 'drill-group-transactions',
+    type: 'drill',
+    category: 'Drills',
+    difficulty: 2,
+    minutes: 5,
+    prompt: 'Given an array of transactions, group them by status.',
+    hint1: 'This is another reduce problem.',
+    hint2: 'Initialize the array for a status before pushing into it.',
+    answer: `function groupTransactionsByStatus(transactions) {
+  return transactions.reduce((acc, tx) => {
+    if (!acc[tx.status]) acc[tx.status] = []
+    acc[tx.status].push(tx)
+    return acc
+  }, {})
+}`,
+    takeaway: 'A lot of interview coding questions repeat the same accumulation patterns in different clothes.',
+  },
 ]
