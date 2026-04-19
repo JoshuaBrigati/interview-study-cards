@@ -12,6 +12,7 @@ export type QuestionCard = {
   bullets?: string[]
   sampleCode?: string
   takeaway?: string
+  followUps?: string[]
 }
 
 export type DrillCard = {
@@ -25,6 +26,7 @@ export type DrillCard = {
   hint2: string
   answer: string
   takeaway?: string
+  followUps?: string[]
 }
 
 export type StudyCard = QuestionCard | DrillCard
@@ -60,6 +62,11 @@ const { data, isLoading } = useQuery({
 // shared app state
 const { currentWorkspace } = useWorkspaceContext()`,
     takeaway: 'Classify state before picking a tool.',
+    followUps: [
+      'Why is server state different from client state?',
+      'What goes wrong when teams put server data into global client state?',
+      'When would you still intentionally share client state globally?',
+    ],
   },
   {
     id: 'state-tool-choice',
@@ -81,6 +88,11 @@ const useMarketStore = create((set) => ({
   setSelectedMarket: (m) => set({ selectedMarket: m }),
 }))`,
     takeaway: 'Context is easy to overuse. Ask: how shared AND how change-heavy?',
+    followUps: [
+      'Why not just put all app state into context?',
+      'When does context become painful?',
+      'When would Redux be worth the extra ceremony?',
+    ],
   },
   {
     id: 'state-common-mistake',
@@ -124,6 +136,11 @@ const useMarketStore = create((set) => ({
 // 2. Integration: does this component + data interaction work?
 // 3. Unit: does this pure helper hold up?`,
     takeaway: 'Interviewers want prioritization, not "we should test everything."',
+    followUps: [
+      'Why would you start with E2E instead of unit tests?',
+      'What kinds of flows deserve E2E coverage first?',
+      'What would you leave untested at first?',
+    ],
   },
   {
     id: 'testing-levels',
@@ -162,6 +179,11 @@ const { data } = useReadContract({
   args: [userAddress],
 })`,
     takeaway: 'Web3 tooling questions are usually about layers and tradeoffs.',
+    followUps: [
+      'Why would you choose wagmi plus viem in a React app?',
+      'When would ethers still be the better choice?',
+      'What does wagmi solve that viem alone does not?',
+    ],
   },
   {
     id: 'viem-over-ethers',
@@ -197,6 +219,11 @@ const walletClient = createWalletClient({
   chain, transport: custom(window.ethereum)
 })`,
     takeaway: 'Public for chain data. Wallet for user-authorized actions.',
+    followUps: [
+      'Why not do all reads through the wallet client?',
+      'What UX problems happen if you blur reads and writes together?',
+      'Where would you create these clients in a frontend app?',
+    ],
   },
   {
     id: 'ai-philosophy',
@@ -223,6 +250,11 @@ const walletClient = createWalletClient({
     deepAnswer:
       'Architecture holds up when it helps the team move consistently, not when it looks clever. Clear boundaries prevent every feature from inventing patterns. Shared primitives keep product quality and speed aligned. Predictable data flow keeps state bugs from multiplying. Better architecture often removes accidental complexity, not adds layers.',
     takeaway: 'Good architecture helps the team stay coherent as the product grows.',
+    followUps: [
+      'What kinds of abstractions become expensive over time?',
+      'How do you know when the architecture is too complicated?',
+      'How would you improve an architecture without freezing product work?',
+    ],
   },
   {
     id: 'drill-tictactoe',
@@ -330,6 +362,11 @@ const [email, setEmail] = useState('')
 const inputRef = useRef<HTMLInputElement>(null)
 <input ref={inputRef} defaultValue="" />`,
     takeaway: 'Use controlled when UI logic depends on the value. Use uncontrolled when React does not need to care on every keystroke.',
+    followUps: [
+      'What are the tradeoffs of controlled inputs?',
+      'Why can uncontrolled inputs be simpler?',
+      'When would a form library change the answer?',
+    ],
   },
   {
     id: 'react-derived-state',
@@ -346,6 +383,11 @@ const inputRef = useRef<HTMLInputElement>(null)
   return items.filter((item) => item.name.includes(search))
 }, [items, search])`,
     takeaway: 'If it can be computed from current state or props, it usually should not be its own stored state.',
+    followUps: [
+      'When would you intentionally store derived state anyway?',
+      'How can derived state create bugs?',
+      'When should you memoize derived values?',
+    ],
   },
   {
     id: 'react-custom-hooks',
@@ -369,6 +411,11 @@ const inputRef = useRef<HTMLInputElement>(null)
   return debounced
 }`,
     takeaway: 'Custom hooks should create a clearer boundary, not just move code around.',
+    followUps: [
+      'What is a sign that a custom hook is premature?',
+      'What logic belongs in a hook versus a component?',
+      'When does a hook become too generic?',
+    ],
   },
   {
     id: 'react-usememo-usecallback',
@@ -389,6 +436,11 @@ const handleSelect = useCallback((id: string) => {
   setSelectedId(id)
 }, [])`,
     takeaway: 'Memoization is for real performance or identity problems, not default style.',
+    followUps: [
+      'How can overusing useMemo or useCallback make code worse?',
+      'When does function identity actually matter?',
+      'How would you prove a component needs memoization?',
+    ],
   },
   {
     id: 'frontend-ssr-csr-isr',
@@ -402,6 +454,11 @@ const handleSelect = useCallback((id: string) => {
     deepAnswer:
       'This is really about matching the rendering model to the product requirement. If the page is marketing or content-heavy and does not change often, static generation is usually ideal. If SEO matters and the data changes on request, SSR can make sense. If the surface is mostly an authenticated app where interaction matters more than initial crawlability, CSR is often fine. ISR sits in the middle for pages where freshness matters but full request-time rendering is unnecessary. A strong answer shows you are not dogmatic and that you care about tradeoffs like latency, caching, complexity, and SEO.',
     takeaway: 'Pick the rendering model based on freshness, SEO, and interaction needs, not fashion.',
+    followUps: [
+      'Why would you choose CSR for an authenticated app?',
+      'What are the tradeoffs of SSR?',
+      'When does ISR beat full SSR?',
+    ],
   },
   {
     id: 'frontend-error-boundaries',
@@ -591,6 +648,11 @@ const handleSelect = useCallback((id: string) => {
     deepAnswer:
       'Chain switching is both a technical and UX problem. Technically, the app needs to know the active chain and whether the wallet matches the expected environment. From a UX perspective, the app should not wait until a write fails to tell the user they are on the wrong chain. I prefer to surface wrong-network state early, provide a clear switch action when possible, and handle rejection/errors cleanly if the wallet refuses or the chain is not available. Interviewers usually want to hear that you think beyond the happy path.',
     takeaway: 'Wrong-network state should be first-class, not an afterthought.',
+    followUps: [
+      'What should the UI do before a write if the user is on the wrong chain?',
+      'How do you handle a rejected chain switch?',
+      'When should chain mismatch block interaction completely?',
+    ],
   },
   {
     id: 'web3-transaction-lifecycle',
@@ -611,6 +673,11 @@ const handleSelect = useCallback((id: string) => {
   | 'confirmed'
   | 'failed'`,
     takeaway: 'Transaction UX should make the lifecycle explicit, not vague.',
+    followUps: [
+      'Why is submitted different from confirmed?',
+      'How would you communicate user rejection versus network failure?',
+      'Would you show optimistic success before confirmation?',
+    ],
   },
   {
     id: 'web3-optimistic-ui',
@@ -650,6 +717,11 @@ const handleSelect = useCallback((id: string) => {
     deepAnswer:
       'Direct reads are appealing because they are simple and close to the source of truth, but they do not scale well for complex history views, leaderboard-style queries, or anything requiring cross-entity aggregation. Indexers are valuable when the product needs richer query patterns, denormalized data, or fast historical exploration. The tradeoff is that indexers add infrastructure and potential lag behind chain truth. A strong answer shows you understand that this is a product/data-shape tradeoff, not just a technical preference.',
     takeaway: 'Use direct reads for simple live chain access. Use indexers when the product needs history, aggregation, or fast queryability.',
+    followUps: [
+      'What product features push you toward an indexer?',
+      'What are the risks of relying on an indexer?',
+      'When is a direct read enough?',
+    ],
   },
   {
     id: 'web3-contract-hooks-architecture',

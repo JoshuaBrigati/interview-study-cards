@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import type { Category } from '../data'
 
 type IconName =
@@ -16,6 +16,7 @@ type IconName =
   | 'target'
   | 'sun'
   | 'moon'
+  | 'spark'
 
 export function Icon({ name, size = 16 }: { name: IconName; size?: number }) {
   const paths: Record<IconName, ReactNode> = {
@@ -44,6 +45,7 @@ export function Icon({ name, size = 16 }: { name: IconName; size?: number }) {
       </>
     ),
     moon: <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />,
+    spark: <path d="M12 2l1.7 4.8L18.5 8l-4.8 1.2L12 14l-1.7-4.8L5.5 8l4.8-1.2L12 2Zm7 12 1 2.8L23 18l-3 1-1 3-1-3-3-1 3-1.2L19 14ZM5 15l.8 2.2L8 18l-2.2.8L5 21l-.8-2.2L2 18l2.2-.8L5 15Z" />,
   }
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -91,6 +93,34 @@ export function Takeaway({ children, cat }: { children: ReactNode; cat: Category
     <div className="takeaway" data-cat={cat}>
       <b>Takeaway</b>
       {children}
+    </div>
+  )
+}
+
+export function FollowUpList({ items, cat, compact = false }: { items?: string[]; cat: Category; compact?: boolean }) {
+  const [open, setOpen] = useState(false)
+
+  if (!items?.length) return null
+
+  return (
+    <div className={`followups ${open ? 'open' : ''} ${compact ? 'compact' : ''}`} data-cat={cat}>
+      <button className="followups-toggle" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+        <span className="followups-label">
+          <Icon name="spark" size={14} />
+          Follow-ups
+          <span className="followups-count">{items.length}</span>
+        </span>
+        <span className={`followups-chevron ${open ? 'open' : ''}`}>
+          <Icon name="chevron" size={14} />
+        </span>
+      </button>
+      {open && (
+        <ul className="followups-list">
+          {items.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }

@@ -1059,14 +1059,19 @@ code { font-family: var(--font-mono); }
   border: 1px solid var(--line);
   background: var(--bg-elev-2);
   border-radius: 14px;
-  padding: 18px;
+  padding: 20px;
   overflow: auto;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  max-height: 420px;
-  font-size: 14px;
-  line-height: 1.6;
+  gap: 16px;
+  min-height: 260px;
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+.arena-answer .code {
+  font-size: 13.5px;
+  line-height: 1.7;
+  padding: 16px 18px;
 }
 .arena-answer .section-label {
   color: var(--cat, var(--accent));
@@ -1266,4 +1271,74 @@ code { font-family: var(--font-mono); }
   }
   .arena-actions { grid-template-columns: repeat(2, 1fr); }
   .feed-view { padding: 16px 14px 80px; }
+}
+
+
+/* ── Follow-ups ── */
+.followups {
+  margin-top: 14px;
+  border: 1px solid color-mix(in oklab, var(--cat, var(--line-strong)) 28%, var(--line));
+  border-radius: 14px;
+  background: color-mix(in oklab, var(--bg-elev-2) 86%, var(--cat, var(--accent)) 14%);
+  overflow: hidden;
+}
+.followups.compact {
+  margin-top: 12px;
+}
+.followups-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  text-align: left;
+}
+.followups-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.followups-count {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent-fg);
+  background: var(--cat, var(--accent));
+}
+.followups-chevron {
+  color: var(--fg-muted);
+  transition: transform 160ms ease;
+}
+.followups-chevron.open {
+  transform: rotate(180deg);
+}
+.followups-list {
+  margin: 0;
+  padding: 0 14px 14px 32px;
+  color: var(--fg-muted);
+}
+.followups-list li + li {
+  margin-top: 8px;
+}
+@media (max-width: 640px) {
+  .followups-toggle {
+    padding: 11px 12px;
+  }
+  .followups-label {
+    font-size: 12px;
+  }
+  .followups-list {
+    padding: 0 12px 12px 28px;
+    font-size: 13px;
+    line-height: 1.45;
+  }
 }

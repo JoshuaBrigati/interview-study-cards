@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { StudyCard } from '../data'
 import type { ProgressState } from '../progress'
-import { CategoryBadge, CodeBlock, Difficulty, Icon, ReviewCheck, Takeaway } from './primitives'
+import { CategoryBadge, CodeBlock, Difficulty, FollowUpList, Icon, ReviewCheck, Takeaway } from './primitives'
 
 type Props = {
   cards: StudyCard[]
@@ -280,6 +280,7 @@ function FlashBack({ card, hintLevel }: { card: StudyCard; hintLevel: number }) 
             </div>
             {card.sampleCode && <CodeBlock>{card.sampleCode}</CodeBlock>}
             {card.takeaway && <Takeaway cat={card.category}>{card.takeaway}</Takeaway>}
+            <FollowUpList items={card.followUps} cat={card.category} compact />
           </>
         ) : (
           <>
@@ -305,6 +306,7 @@ function FlashBack({ card, hintLevel }: { card: StudyCard; hintLevel: number }) 
               <CodeBlock>{card.answer}</CodeBlock>
             </div>
             {card.takeaway && <Takeaway cat={card.category}>{card.takeaway}</Takeaway>}
+            <FollowUpList items={card.followUps} cat={card.category} compact />
           </>
         )}
       </div>

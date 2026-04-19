@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Category, DrillCard, StudyCard } from '../data'
 import type { ProgressState } from '../progress'
-import { CategoryBadge, CodeBlock, Difficulty, Icon, ReviewCheck, Takeaway } from './primitives'
+import { CategoryBadge, CodeBlock, Difficulty, FollowUpList, Icon, ReviewCheck, Takeaway } from './primitives'
 
 type Props = {
   cards: StudyCard[]
@@ -133,6 +133,7 @@ export function ModeFeed({ cards, progress, toggleReviewed, filter, setFilter, c
                       {activeSection === 'code' && c.sampleCode && <CodeBlock>{c.sampleCode}</CodeBlock>}
                     </div>
                     {c.takeaway && <Takeaway cat={c.category}>{c.takeaway}</Takeaway>}
+                    <FollowUpList items={c.followUps} cat={c.category} />
                   </>
                 ) : (
                   <DrillBody card={c} />

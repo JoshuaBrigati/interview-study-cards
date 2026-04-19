@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { Category, StudyCard } from '../data'
 import type { ProgressState } from '../progress'
-import { CategoryBadge, CodeBlock, Difficulty, Takeaway } from './primitives'
+import { CategoryBadge, CodeBlock, Difficulty, FollowUpList, Takeaway } from './primitives'
 
 type Props = {
   cards: StudyCard[]
@@ -177,6 +177,7 @@ export function ModeArcade({
                     {card.deepAnswer}
                   </p>
                   {card.sampleCode && <CodeBlock>{card.sampleCode}</CodeBlock>}
+                  <FollowUpList items={card.followUps} cat={card.category} compact />
                 </>
               ) : (
                 <>
@@ -189,6 +190,7 @@ export function ModeArcade({
                     {card.hint2}
                   </p>
                   <CodeBlock>{card.answer}</CodeBlock>
+                  <FollowUpList items={card.followUps} cat={card.category} compact />
                 </>
               )}
               {card.takeaway && <Takeaway cat={card.category}>{card.takeaway}</Takeaway>}
