@@ -12,7 +12,7 @@ export type QuestionCard = {
   bullets?: string[]
   sampleCode?: string
   takeaway?: string
-  followUps?: string[]
+  followUps?: { question: string; answer: string }[]
 }
 
 export type DrillCard = {
@@ -26,7 +26,7 @@ export type DrillCard = {
   hint2: string
   answer: string
   takeaway?: string
-  followUps?: string[]
+  followUps?: { question: string; answer: string }[]
 }
 
 export type StudyCard = QuestionCard | DrillCard
@@ -63,9 +63,21 @@ const { data, isLoading } = useQuery({
 const { currentWorkspace } = useWorkspaceContext()`,
     takeaway: 'Classify state before picking a tool.',
     followUps: [
-      'Why is server state different from client state?',
-      'What goes wrong when teams put server data into global client state?',
-      'When would you still intentionally share client state globally?',
+      {
+        question: 'Why is server state different from client state?',
+        answer:
+          'Because the backend owns the source of truth. That means freshness, caching, refetching, loading, and invalidation matter in a way they usually do not for client-owned UI state. You are not just storing a value, you are coordinating with an external system that can change independently of the UI.',
+      },
+      {
+        question: 'What goes wrong when teams put server data into global client state?',
+        answer:
+          'They often reinvent caching badly. Data gets stale, invalidation rules become unclear, loading and error states get scattered, and updates become fragile. Tools built for server state exist because backend-owned data behaves differently from local app state.',
+      },
+      {
+        question: 'When would you still intentionally share client state globally?',
+        answer:
+          'When multiple parts of the app need the same client-owned value at the same time, like auth/session context, theme, selected workspace, or a shared UI workflow. The key is that the state is truly shared and client-owned, not just convenient to centralize.',
+      },
     ],
   },
   {
@@ -89,9 +101,21 @@ const useMarketStore = create((set) => ({
 }))`,
     takeaway: 'Context is easy to overuse. Ask: how shared AND how change-heavy?',
     followUps: [
-      'Why not just put all app state into context?',
-      'When does context become painful?',
-      'When would Redux be worth the extra ceremony?',
+      {
+        question: 'Why not just put all app state into context?',
+        answer:
+          'Because context is a delivery mechanism, not a performance strategy. When its value changes, every consumer re-renders. That is fine for stable values, but it gets painful for fast-changing or heavily shared state.',
+      },
+      {
+        question: 'When does context become painful?',
+        answer:
+          'Usually when updates are frequent, the value object changes often, or many consumers subscribe to it. At that point, performance and debuggability both suffer, and a store with selective subscriptions becomes a better fit.',
+      },
+      {
+        question: 'When would Redux be worth the extra ceremony?',
+        answer:
+          'When the shared state model is large, central to the product, and benefits from strong conventions, explicit events, and predictable structure across a bigger team. If the product complexity justifies the overhead, Redux can be a good trade.',
+      },
     ],
   },
   {
@@ -137,9 +161,21 @@ const useMarketStore = create((set) => ({
 // 3. Unit: does this pure helper hold up?`,
     takeaway: 'Interviewers want prioritization, not "we should test everything."',
     followUps: [
-      'Why would you start with E2E instead of unit tests?',
-      'What kinds of flows deserve E2E coverage first?',
-      'What would you leave untested at first?',
+      {
+        question: 'Why would you start with E2E instead of unit tests?',
+        answer:
+          'Because if the core user workflow is broken, a pile of passing unit tests does not help much. E2E gives the highest confidence per test when the app currently has no coverage and you need to protect business-critical behavior fast.',
+      },
+      {
+        question: 'What kinds of flows deserve E2E coverage first?',
+        answer:
+          'Anything tied to revenue, activation, retention, or trust. Sign-up, checkout, authentication, transaction flows, or the main product workflow are usually first. I start with what would hurt the business most if it broke tomorrow.',
+      },
+      {
+        question: 'What would you leave untested at first?',
+        answer:
+          'Low-risk presentational details, trivial wrappers, and areas with little business impact. In an app with no test coverage, prioritization matters more than completeness at the start.',
+      },
     ],
   },
   {
@@ -180,9 +216,21 @@ const { data } = useReadContract({
 })`,
     takeaway: 'Web3 tooling questions are usually about layers and tradeoffs.',
     followUps: [
-      'Why would you choose wagmi plus viem in a React app?',
-      'When would ethers still be the better choice?',
-      'What does wagmi solve that viem alone does not?',
+      {
+        question: 'Why would you choose wagmi plus viem in a React app?',
+        answer:
+          'Because they fit the stack cleanly. viem handles low-level EVM interaction with strong TypeScript ergonomics, and wagmi adds React-specific wallet and contract hooks on top. Together they give a modern React web3 setup with less glue code.',
+      },
+      {
+        question: 'When would ethers still be the better choice?',
+        answer:
+          'Usually in an existing codebase that is already deeply invested in ethers, or when the surrounding tooling and team familiarity make migration not worth it. I would not force a tooling rewrite just to be trendy.',
+      },
+      {
+        question: 'What does wagmi solve that viem alone does not?',
+        answer:
+          'wagmi gives you React-ready hooks and wallet-aware state patterns like account, network, connection, reads, and writes. viem is lower-level and great on its own, but wagmi removes a lot of repetitive React integration work.',
+      },
     ],
   },
   {
@@ -220,9 +268,21 @@ const walletClient = createWalletClient({
 })`,
     takeaway: 'Public for chain data. Wallet for user-authorized actions.',
     followUps: [
-      'Why not do all reads through the wallet client?',
-      'What UX problems happen if you blur reads and writes together?',
-      'Where would you create these clients in a frontend app?',
+      {
+        question: 'Why not do all reads through the wallet client?',
+        answer:
+          'Because reads do not require user authorization, and tying them to the wallet adds unnecessary coupling and friction. Public clients are cheaper, simpler, and better suited for general chain reads.',
+      },
+      {
+        question: 'What UX problems happen if you blur reads and writes together?',
+        answer:
+          'The app can feel more intrusive than it should. Users may get prompted too often, and the UI becomes harder to reason about because safe read-only actions are mixed with signing or transaction behavior.',
+      },
+      {
+        question: 'Where would you create these clients in a frontend app?',
+        answer:
+          'Usually in a shared web3 or infrastructure layer, then expose them through hooks or app-level providers so components do not have to rebuild low-level clients everywhere.',
+      },
     ],
   },
   {
@@ -251,9 +311,21 @@ const walletClient = createWalletClient({
       'Architecture holds up when it helps the team move consistently, not when it looks clever. Clear boundaries prevent every feature from inventing patterns. Shared primitives keep product quality and speed aligned. Predictable data flow keeps state bugs from multiplying. Better architecture often removes accidental complexity, not adds layers.',
     takeaway: 'Good architecture helps the team stay coherent as the product grows.',
     followUps: [
-      'What kinds of abstractions become expensive over time?',
-      'How do you know when the architecture is too complicated?',
-      'How would you improve an architecture without freezing product work?',
+      {
+        question: 'What kinds of abstractions become expensive over time?',
+        answer:
+          'Usually the ones that hide too much, solve hypothetical future problems, or make simple work harder than it should be. Over-engineered base components and generic utility layers are common offenders.',
+      },
+      {
+        question: 'How do you know when the architecture is too complicated?',
+        answer:
+          'When simple features take too long to ship, engineers avoid touching key areas, or new people cannot tell where things should live. Good architecture should reduce friction, not create it.',
+      },
+      {
+        question: 'How would you improve an architecture without freezing product work?',
+        answer:
+          'Incrementally. I would identify the most painful hotspots, improve patterns while touching active areas, and avoid big-bang rewrites unless the current system is truly blocking the team.',
+      },
     ],
   },
   {
@@ -363,9 +435,21 @@ const inputRef = useRef<HTMLInputElement>(null)
 <input ref={inputRef} defaultValue="" />`,
     takeaway: 'Use controlled when UI logic depends on the value. Use uncontrolled when React does not need to care on every keystroke.',
     followUps: [
-      'What are the tradeoffs of controlled inputs?',
-      'Why can uncontrolled inputs be simpler?',
-      'When would a form library change the answer?',
+      {
+        question: 'What are the tradeoffs of controlled inputs?',
+        answer:
+          'They give you maximum React control, which is great for validation and dynamic UI, but they also add state wiring and more rerenders. That is often worth it, but not always necessary.',
+      },
+      {
+        question: 'Why can uncontrolled inputs be simpler?',
+        answer:
+          'Because the DOM already knows how to manage input state. If React does not need to react to every keystroke, letting the browser own the value can reduce complexity and boilerplate.',
+      },
+      {
+        question: 'When would a form library change the answer?',
+        answer:
+          'Libraries like React Hook Form often lean on uncontrolled inputs internally for performance and ergonomics, so they can give you some of the best parts of both approaches depending on the form complexity.',
+      },
     ],
   },
   {
@@ -384,9 +468,21 @@ const inputRef = useRef<HTMLInputElement>(null)
 }, [items, search])`,
     takeaway: 'If it can be computed from current state or props, it usually should not be its own stored state.',
     followUps: [
-      'When would you intentionally store derived state anyway?',
-      'How can derived state create bugs?',
-      'When should you memoize derived values?',
+      {
+        question: 'When would you intentionally store derived state anyway?',
+        answer:
+          'When I need a deliberate snapshot for a workflow, or when recalculating is truly expensive and storing the value is simpler than recomputing it repeatedly. But I treat that as the exception, not the default.',
+      },
+      {
+        question: 'How can derived state create bugs?',
+        answer:
+          'Because duplicated truth drifts. If the source changes and the derived copy is not updated correctly, the UI shows stale or inconsistent information.',
+      },
+      {
+        question: 'When should you memoize derived values?',
+        answer:
+          'When the computation is expensive enough to matter or when referential stability affects child renders. If it is cheap, I usually prefer simpler code over memoization.',
+      },
     ],
   },
   {
@@ -412,9 +508,21 @@ const inputRef = useRef<HTMLInputElement>(null)
 }`,
     takeaway: 'Custom hooks should create a clearer boundary, not just move code around.',
     followUps: [
-      'What is a sign that a custom hook is premature?',
-      'What logic belongs in a hook versus a component?',
-      'When does a hook become too generic?',
+      {
+        question: 'What is a sign that a custom hook is premature?',
+        answer:
+          'If it exists only to hide code rather than clarify responsibility, it is probably premature. Good hooks represent a real reusable concept, not just line-count reduction.',
+      },
+      {
+        question: 'What logic belongs in a hook versus a component?',
+        answer:
+          'Stateful logic, subscriptions, fetching, and behavior that is reusable or conceptually separate often belong in a hook. Rendering and layout decisions should usually stay in the component.',
+      },
+      {
+        question: 'When does a hook become too generic?',
+        answer:
+          'When it stops mapping to a real product or technical concept and starts becoming a vague utility nobody understands. Over-generalized hooks are often harder to maintain than duplicated code.',
+      },
     ],
   },
   {
@@ -437,9 +545,21 @@ const handleSelect = useCallback((id: string) => {
 }, [])`,
     takeaway: 'Memoization is for real performance or identity problems, not default style.',
     followUps: [
-      'How can overusing useMemo or useCallback make code worse?',
-      'When does function identity actually matter?',
-      'How would you prove a component needs memoization?',
+      {
+        question: 'How can overusing useMemo or useCallback make code worse?',
+        answer:
+          'It adds indirection and dependency complexity without guaranteed performance benefit. The result is harder-to-read code that may not actually be faster.',
+      },
+      {
+        question: 'When does function identity actually matter?',
+        answer:
+          'Mostly when passing callbacks to memoized children, using them in effect dependencies, or relying on referential equality in performance-sensitive cases.',
+      },
+      {
+        question: 'How would you prove a component needs memoization?',
+        answer:
+          'By measuring. I would use React DevTools profiler, real render counts, or visible UI slowness rather than assuming memoization is needed because the code looks complex.',
+      },
     ],
   },
   {
@@ -455,9 +575,21 @@ const handleSelect = useCallback((id: string) => {
       'This is really about matching the rendering model to the product requirement. If the page is marketing or content-heavy and does not change often, static generation is usually ideal. If SEO matters and the data changes on request, SSR can make sense. If the surface is mostly an authenticated app where interaction matters more than initial crawlability, CSR is often fine. ISR sits in the middle for pages where freshness matters but full request-time rendering is unnecessary. A strong answer shows you are not dogmatic and that you care about tradeoffs like latency, caching, complexity, and SEO.',
     takeaway: 'Pick the rendering model based on freshness, SEO, and interaction needs, not fashion.',
     followUps: [
-      'Why would you choose CSR for an authenticated app?',
-      'What are the tradeoffs of SSR?',
-      'When does ISR beat full SSR?',
+      {
+        question: 'Why would you choose CSR for an authenticated app?',
+        answer:
+          'Because SEO is usually less important there, and the product is often highly interactive after login. In that case, a client-rendered shell can be simpler and perfectly appropriate.',
+      },
+      {
+        question: 'What are the tradeoffs of SSR?',
+        answer:
+          'SSR can improve freshness and SEO, but it also adds request-time work, caching complexity, and sometimes infrastructure cost. It is useful, but not free.',
+      },
+      {
+        question: 'When does ISR beat full SSR?',
+        answer:
+          'When the content needs to stay reasonably fresh but does not need to be regenerated on every request. ISR gives you a nice middle ground between static performance and dynamic freshness.',
+      },
     ],
   },
   {
@@ -649,9 +781,21 @@ const handleSelect = useCallback((id: string) => {
       'Chain switching is both a technical and UX problem. Technically, the app needs to know the active chain and whether the wallet matches the expected environment. From a UX perspective, the app should not wait until a write fails to tell the user they are on the wrong chain. I prefer to surface wrong-network state early, provide a clear switch action when possible, and handle rejection/errors cleanly if the wallet refuses or the chain is not available. Interviewers usually want to hear that you think beyond the happy path.',
     takeaway: 'Wrong-network state should be first-class, not an afterthought.',
     followUps: [
-      'What should the UI do before a write if the user is on the wrong chain?',
-      'How do you handle a rejected chain switch?',
-      'When should chain mismatch block interaction completely?',
+      {
+        question: 'What should the UI do before a write if the user is on the wrong chain?',
+        answer:
+          'Surface the mismatch clearly and guide the user to switch before they attempt the action. It is much better to prevent confusion than let the write fail downstream.',
+      },
+      {
+        question: 'How do you handle a rejected chain switch?',
+        answer:
+          'Treat it like a normal user decision, not an exceptional catastrophe. Keep the UI clear about what is blocked and let them retry when they are ready.',
+      },
+      {
+        question: 'When should chain mismatch block interaction completely?',
+        answer:
+          'When the action would be invalid or misleading on the wrong network, especially for writes. For safe reads or educational views, you may allow browsing with a clear warning.',
+      },
     ],
   },
   {
@@ -674,9 +818,21 @@ const handleSelect = useCallback((id: string) => {
   | 'failed'`,
     takeaway: 'Transaction UX should make the lifecycle explicit, not vague.',
     followUps: [
-      'Why is submitted different from confirmed?',
-      'How would you communicate user rejection versus network failure?',
-      'Would you show optimistic success before confirmation?',
+      {
+        question: 'Why is submitted different from confirmed?',
+        answer:
+          'Submitted means the transaction was handed off to the network. Confirmed means it was actually included and finalized enough for the product to trust it. Those are very different user states.',
+      },
+      {
+        question: 'How would you communicate user rejection versus network failure?',
+        answer:
+          'I would separate them clearly in copy and state. User rejection is a normal intentional action. Network failure is an external problem. If you lump them together, users get confused about what actually happened.',
+      },
+      {
+        question: 'Would you show optimistic success before confirmation?',
+        answer:
+          'Usually no for anything trust-sensitive. I might show a pending success state, but I would avoid telling the user the action is complete before the network actually confirms it.',
+      },
     ],
   },
   {
@@ -718,9 +874,21 @@ const handleSelect = useCallback((id: string) => {
       'Direct reads are appealing because they are simple and close to the source of truth, but they do not scale well for complex history views, leaderboard-style queries, or anything requiring cross-entity aggregation. Indexers are valuable when the product needs richer query patterns, denormalized data, or fast historical exploration. The tradeoff is that indexers add infrastructure and potential lag behind chain truth. A strong answer shows you understand that this is a product/data-shape tradeoff, not just a technical preference.',
     takeaway: 'Use direct reads for simple live chain access. Use indexers when the product needs history, aggregation, or fast queryability.',
     followUps: [
-      'What product features push you toward an indexer?',
-      'What are the risks of relying on an indexer?',
-      'When is a direct read enough?',
+      {
+        question: 'What product features push you toward an indexer?',
+        answer:
+          'Historical views, rich search, aggregated dashboards, feeds, leaderboards, and anything that requires joining or reshaping large amounts of onchain data usually push me toward an indexer.',
+      },
+      {
+        question: 'What are the risks of relying on an indexer?',
+        answer:
+          'Lag, extra infrastructure, additional failure modes, and sometimes disagreement with raw chain truth. You gain query power, but you add another system that can drift or break.',
+      },
+      {
+        question: 'When is a direct read enough?',
+        answer:
+          'When the data need is simple, current, and low-volume, like reading balances, contract state, or straightforward user-specific information directly from the chain.',
+      },
     ],
   },
   {

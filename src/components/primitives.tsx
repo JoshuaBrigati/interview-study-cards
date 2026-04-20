@@ -97,8 +97,17 @@ export function Takeaway({ children, cat }: { children: ReactNode; cat: Category
   )
 }
 
-export function FollowUpList({ items, cat, compact = false }: { items?: string[]; cat: Category; compact?: boolean }) {
+export function FollowUpList({
+  items,
+  cat,
+  compact = false,
+}: {
+  items?: { question: string; answer: string }[]
+  cat: Category
+  compact?: boolean
+}) {
   const [open, setOpen] = useState(false)
+  const [openQuestion, setOpenQuestion] = useState<string | null>(null)
 
   if (!items?.length) return null
 
@@ -115,11 +124,26 @@ export function FollowUpList({ items, cat, compact = false }: { items?: string[]
         </span>
       </button>
       {open && (
-        <ul className="followups-list">
-          {items.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
+        <div className="followups-list">
+          {items.map((item) => {
+            const expanded = openQuestion === item.question
+            return (
+              <div key={item.question} className={`followup-item ${expanded ? 'open' : ''}`}>
+                <button
+                  className="followup-question"
+                  onClick={() => setOpenQuestion((cur) => (cur === item.question ? null : item.question))}
+                  aria-expanded={expanded}
+                >
+                  <span>{item.question}</span>
+                  <span className={`followups-chevron ${expanded ? 'open' : ''}`}>
+                    <Icon name="chevron" size={14} />
+                  </span>
+                </button>
+                {expanded && <div className="followup-answer">{item.answer}</div>}
+              </div>
+            )
+          })}
+        </div>
       )}
     </div>
   )
