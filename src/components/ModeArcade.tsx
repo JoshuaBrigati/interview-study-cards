@@ -86,11 +86,11 @@ export function ModeArcade({
     { id: 'first', title: 'First blood', sub: 'Review your first card', icon: '★', unlocked: reviewedTotal >= 1 },
     { id: 'five', title: '5-card combo', sub: 'Streak of 5 correct', icon: '5', unlocked: combo >= 5 },
     {
-      id: 'state',
-      title: 'State specialist',
-      sub: 'All State cards reviewed',
-      icon: 'S',
-      unlocked: !!catStats['State'] && catStats['State'].total > 0 && catStats['State'].done === catStats['State'].total,
+      id: 'react',
+      title: 'React ready',
+      sub: 'All React cards reviewed',
+      icon: 'R',
+      unlocked: !!catStats['React'] && catStats['React'].total > 0 && catStats['React'].done === catStats['React'].total,
     },
     {
       id: 'drill',

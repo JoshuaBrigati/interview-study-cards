@@ -276,9 +276,9 @@ function App() {
             onClick={() => setFilter(c)}
           >
             <span className="tab-icon" style={{ color: 'var(--cat)' }}>
-              {c === 'State' && <Icon name="bolt" size={18} />}
-              {c === 'Testing' && <Icon name="target" size={18} />}
-              {c === 'Web3' && <Icon name="star" size={18} />}
+              {c === 'Behavioral' && <Icon name="target" size={18} />}
+              {c === 'React' && <Icon name="bolt" size={18} />}
+              {c === 'DOM & CSS' && <Icon name="star" size={18} />}
               {c === 'Architecture' && <Icon name="book" size={18} />}
               {c === 'Drills' && <Icon name="flip" size={18} />}
             </span>

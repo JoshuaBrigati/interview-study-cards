@@ -25,9 +25,9 @@
   --accent-2: #c5a2ff;
   --warn: #ffb057;
   --danger: #ff6b8a;
-  --cat-state: #7cf8c2;
-  --cat-testing: #8ab4ff;
-  --cat-web3: #c5a2ff;
+  --cat-behavioral: #8ab4ff;
+  --cat-react: #7cf8c2;
+  --cat-dom: #c5a2ff;
   --cat-architecture: #ffb057;
   --cat-drills: #ff8fd0;
   --shadow-card: 0 20px 60px -20px rgba(0, 0, 0, 0.6), 0 2px 0 rgba(255, 255, 255, 0.03) inset;
@@ -48,9 +48,9 @@
   --accent-2: #7a3ac1;
   --warn: #b96a0a;
   --danger: #c2365b;
-  --cat-state: #0f7a5a;
-  --cat-testing: #1f5fc7;
-  --cat-web3: #7a3ac1;
+  --cat-behavioral: #1f5fc7;
+  --cat-react: #0f7a5a;
+  --cat-dom: #7a3ac1;
   --cat-architecture: #b96a0a;
   --cat-drills: #c2365b;
   --shadow-card: 0 10px 30px -12px rgba(30, 20, 10, 0.15), 0 1px 0 rgba(255, 255, 255, 0.5) inset;
@@ -78,9 +78,9 @@ code { font-family: var(--font-mono); }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 10px; }
 
-[data-cat="State"] { --cat: var(--cat-state); }
-[data-cat="Testing"] { --cat: var(--cat-testing); }
-[data-cat="Web3"] { --cat: var(--cat-web3); }
+[data-cat="Behavioral"] { --cat: var(--cat-behavioral); }
+[data-cat="React"] { --cat: var(--cat-react); }
+[data-cat="DOM & CSS"] { --cat: var(--cat-dom); }
 [data-cat="Architecture"] { --cat: var(--cat-architecture); }
 [data-cat="Drills"] { --cat: var(--cat-drills); }
 

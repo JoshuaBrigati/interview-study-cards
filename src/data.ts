@@ -1,4 +1,4 @@
-export type Category = 'State' | 'Testing' | 'Web3' | 'Architecture' | 'Drills'
+export type Category = 'Behavioral' | 'React' | 'DOM & CSS' | 'Architecture' | 'Drills'
 
 export type QuestionCard = {
   id: string
@@ -31,328 +31,427 @@ export type DrillCard = {
 
 export type StudyCard = QuestionCard | DrillCard
 
-export const CATEGORIES: Category[] = ['State', 'Testing', 'Web3', 'Architecture', 'Drills']
+export const CATEGORIES: Category[] = ['Behavioral', 'React', 'DOM & CSS', 'Architecture', 'Drills']
 
 export const STUDY_CARDS: StudyCard[] = [
   {
-    id: 'state-mental-model',
+    id: 'behavioral-staying-curious',
     type: 'qa',
-    category: 'State',
+    category: 'Behavioral',
     difficulty: 2,
     minutes: 3,
-    question: 'How do you think about state management in a frontend app?',
+    question: 'Tell me about a time you stayed curious and learned something deeply to solve a problem.',
     shortAnswer:
-      'I separate state into three buckets: local UI state, server state, and truly shared client state. Keep state local by default, treat backend data as server state, and only introduce shared stores when multiple parts genuinely need coordinated client-owned state.',
+      'A strong answer shows you did not stop at the first explanation. Walk through how you investigated, what signals you gathered, what you ruled out, and how that curiosity led to a better solution.',
     deepAnswer:
-      'Teams often shove everything into one solution and create unnecessary complexity. Local UI state should stay local because only one component cares. Server state behaves differently — the backend owns truth, so caching, refetching, and stale data matter more than reducers. Shared client state is the smallest bucket but most overused — only use it when multiple places need the same client-owned value at once.',
+      'For Apple, curiosity should sound practical, not academic. A great story here is the Wishish MetaMask SES issue: something looked like a generic Supabase bug, but the real problem was an interaction caused by the extension environment. The important part is showing how you narrowed the problem space, challenged assumptions, and changed implementation based on what you learned. Curiosity at senior level is disciplined investigation, not just enthusiasm.',
     bullets: [
-      'Local UI: modals, tabs, form inputs, wizard steps',
-      'Server: users, bets, messages, leaderboard data',
-      'Shared client: auth, theme, wallet/session, workspace context',
+      'Start with the symptom, not your conclusion',
+      'Explain what you tested and what you ruled out',
+      'End with the technical fix plus the lesson learned',
     ],
-    sampleCode: `// local UI state
-const [isModalOpen, setIsModalOpen] = useState(false)
-
-// server state
-const { data, isLoading } = useQuery({
-  queryKey: ['leaderboard'],
-  queryFn: fetchLeaderboard,
-})
-
-// shared app state
-const { currentWorkspace } = useWorkspaceContext()`,
-    takeaway: 'Classify state before picking a tool.',
+    takeaway: 'Apple will like curiosity that improves product quality, not curiosity as a personality trait alone.',
     followUps: [
       {
-        question: 'Why is server state different from client state?',
+        question: 'How do you know when to keep digging versus move on?',
         answer:
-          'Because the backend owns the source of truth. That means freshness, caching, refetching, loading, and invalidation matter in a way they usually do not for client-owned UI state. You are not just storing a value, you are coordinating with an external system that can change independently of the UI.',
+          'I keep digging while the uncertainty meaningfully changes the solution or risk. If extra investigation no longer changes the decision, I stop and ship the simplest sound path.',
       },
       {
-        question: 'What goes wrong when teams put server data into global client state?',
+        question: 'How do you avoid curiosity turning into over-engineering?',
         answer:
-          'They often reinvent caching badly. Data gets stale, invalidation rules become unclear, loading and error states get scattered, and updates become fragile. Tools built for server state exist because backend-owned data behaves differently from local app state.',
-      },
-      {
-        question: 'When would you still intentionally share client state globally?',
-        answer:
-          'When multiple parts of the app need the same client-owned value at the same time, like auth/session context, theme, selected workspace, or a shared UI workflow. The key is that the state is truly shared and client-owned, not just convenient to centralize.',
+          'By tying the investigation to a concrete question. I am not exploring for its own sake, I am reducing the uncertainty that affects user experience, reliability, or delivery risk.',
       },
     ],
   },
   {
-    id: 'state-tool-choice',
+    id: 'behavioral-new-relationships',
     type: 'qa',
-    category: 'State',
+    category: 'Behavioral',
+    difficulty: 2,
+    minutes: 3,
+    question: 'Tell me about building a new relationship with a cross-functional partner.',
+    shortAnswer:
+      'Focus on trust-building through reliability, clarity, and shared goals. Show how you learned what that person cared about and adapted your communication so you could make progress together.',
+    deepAnswer:
+      'This is likely one of the Apple themes directly. Your best angle is design engineer translation work: partnering with PMs, designers, and engineers, especially on ambiguous or quality-sensitive flows. The answer should not just be “we had meetings.” It should show that you understood another function’s incentives, translated your world into theirs, and created enough trust that decisions got easier over time.',
+    bullets: [
+      'Understand what success means to them',
+      'Bring concrete artifacts: mocks, prototypes, tradeoffs',
+      'Follow through consistently so trust compounds',
+    ],
+    takeaway: 'Apple wants someone who works well with experts, not someone who wins arguments.',
+  },
+  {
+    id: 'behavioral-learning-new-tech',
+    type: 'qa',
+    category: 'Behavioral',
+    difficulty: 2,
+    minutes: 3,
+    question: 'Tell me about learning a new technology quickly to deliver something important.',
+    shortAnswer:
+      'Pick an example where the new technology mattered to the outcome, explain your learning strategy, and show that you balanced speed with judgment instead of pretending you became an expert overnight.',
+    deepAnswer:
+      'For this role, Apple probably cares less about collecting buzzwords and more about whether you can learn fast without thrashing quality. Good examples could be ramping into blockchain auth flows at Burnt XION, new design-system infrastructure, or figuring out unfamiliar tooling to ship under pressure. Structure it around: what was new, how you reduced the learning surface, how you validated your understanding, and what shipped because of it.',
+    takeaway: 'Make learning sound methodical and outcome-driven.',
+  },
+  {
+    id: 'behavioral-difficult-decision',
+    type: 'qa',
+    category: 'Behavioral',
+    difficulty: 3,
+    minutes: 4,
+    question: 'Tell me about a difficult decision where there was no perfect answer.',
+    shortAnswer:
+      'Explain the tradeoff clearly, say what you optimized for, and show that you considered second-order effects instead of framing it like an obvious choice.',
+    deepAnswer:
+      'Apple will care a lot about judgment here. A senior answer names the competing values: speed versus maintainability, polish versus scope, technical purity versus real-world delivery. Then explain the decision criteria, the risks you accepted, how you communicated it, and whether you would make the same call again. The best answers sound thoughtful and a little uncomfortable, because real tradeoffs are not clean.',
+    takeaway: 'The bar is not “always right.” The bar is “good judgment under ambiguity.”',
+    followUps: [
+      {
+        question: 'What if your stakeholders disagreed with the decision?',
+        answer:
+          'I would make the tradeoff explicit, show the cost of each path, and try to align on what we are actually optimizing for. If a call still needs to be made, I prefer a documented decision over vague disagreement.',
+      },
+    ],
+  },
+  {
+    id: 'behavioral-why-apple',
+    type: 'qa',
+    category: 'Behavioral',
+    difficulty: 1,
+    minutes: 2,
+    question: 'Why Apple, and why this in-store applications role?',
+    shortAnswer:
+      'Because the role sits at the intersection of frontend engineering, design quality, and direct customer impact. Apple has an unusually high bar for detail, and this role shapes how people understand and purchase products in physical retail.',
+    deepAnswer:
+      'A strong answer connects your strengths to the team rather than just complimenting the brand. You care about product quality, translating design into production UI, and building experiences that feel clear and trustworthy. This team is specifically about customer-facing retail software, which is a nice fit because the frontend work is not abstract infrastructure. It influences real decisions in real stores. That is a much stronger answer than “Apple is prestigious.”',
+    takeaway: 'Tie your taste and product instincts directly to the role’s customer surface.',
+  },
+  {
+    id: 'behavioral-feedback',
+    type: 'qa',
+    category: 'Behavioral',
+    difficulty: 2,
+    minutes: 3,
+    question: 'Tell me about a time you received hard feedback.',
+    shortAnswer:
+      'Pick real feedback, not fake humblebrag feedback. Show that you understood it, adjusted your behavior, and got better outcomes because of it.',
+    deepAnswer:
+      'The wrong answer is performative self-awareness. The right answer shows you can hear feedback without becoming defensive and that you can turn it into a behavior change. This could be around over-building, communicating tradeoffs sooner, or testing in the real browser earlier. Apple tends to value people who can debate strongly but still absorb reality when the evidence says they should.',
+    takeaway: 'Show growth without sounding fragile or rehearsed.',
+  },
+
+  {
+    id: 'react-controlled-vs-uncontrolled',
+    type: 'qa',
+    category: 'React',
+    difficulty: 1,
+    minutes: 2,
+    question: 'Controlled vs uncontrolled inputs?',
+    shortAnswer:
+      'Controlled inputs keep the value in React state. Uncontrolled inputs let the DOM own the value. I use controlled inputs when the UI depends on the value while typing, and uncontrolled inputs when simpler wiring is enough.',
+    deepAnswer:
+      'Controlled inputs are ideal when validation, conditional UI, formatting, or derived state needs to react on every change. Uncontrolled inputs can be simpler for straightforward forms where React does not need to own every keystroke. The deeper point is not memorizing definitions. It is knowing whether the product actually needs React to own the value continuously or only at submission time.',
+    sampleCode: `const [query, setQuery] = useState('')
+<input value={query} onChange={(e) => setQuery(e.target.value)} />
+
+const inputRef = useRef<HTMLInputElement>(null)
+<input ref={inputRef} defaultValue="" />`,
+    takeaway: 'Pick the source of truth based on what the UI needs, not habit.',
+  },
+  {
+    id: 'react-derived-state',
+    type: 'qa',
+    category: 'React',
+    difficulty: 2,
+    minutes: 3,
+    question: 'What is derived state, and why is storing it often a mistake?',
+    shortAnswer:
+      'Derived state is data you can compute from props or existing state. Storing it separately often creates synchronization bugs because you now have two sources of truth.',
+    deepAnswer:
+      'A lot of React bugs come from storing both the raw data and some computed version of it, then forgetting to update one when the other changes. If the value can be computed from current inputs, I prefer computing it directly or memoizing it if it is expensive. I only store derived state when I intentionally need a snapshot or when the workflow truly demands a separate copy.',
+    sampleCode: `const filteredItems = useMemo(() => {
+  return items.filter((item) => item.name.includes(search))
+}, [items, search])`,
+    takeaway: 'If it can be calculated reliably from current state, it usually should not be stored separately.',
+  },
+  {
+    id: 'react-useeffect',
+    type: 'qa',
+    category: 'React',
+    difficulty: 2,
+    minutes: 3,
+    question: 'How do you think about useEffect?',
+    shortAnswer:
+      'I treat useEffect as a synchronization tool for side effects, not as a catch-all place for app logic. If something can happen during render or be derived directly, I prefer that over an effect.',
+    deepAnswer:
+      'Many React problems come from reaching for useEffect too quickly. Effects are for syncing with external systems: subscriptions, timers, DOM APIs, network requests, imperative libraries. They are not the right answer for every state transition or derived value. When I use an effect, I want the dependency list to tell a clear story about what external thing I am synchronizing with and why.',
+    takeaway: 'The cleanest React often has fewer effects, not more.',
+    followUps: [
+      {
+        question: 'What is a smell that useEffect is being misused?',
+        answer:
+          'If it is mostly moving values from one state variable into another or patching over render logic, it is usually a sign the state model wants simplification rather than another effect.',
+      },
+    ],
+  },
+  {
+    id: 'react-stale-closure',
+    type: 'qa',
+    category: 'React',
+    difficulty: 3,
+    minutes: 3,
+    question: 'What is a stale closure bug in React?',
+    shortAnswer:
+      'It happens when a function captures an old value from a previous render and later uses that outdated value. This commonly shows up with timers, subscriptions, and async callbacks.',
+    deepAnswer:
+      'React functions close over the values from the render where they were created. That is usually fine until a callback runs later and you expect it to see fresh state. Then you get behavior that feels inconsistent or “laggy.” Fixes depend on the case: use functional state updates, correct dependencies, refs for mutable current values, or move the logic so it no longer depends on stale captured data.',
+    sampleCode: `setCount((current) => current + 1)`,
+    takeaway: 'A stale closure is usually not a React mystery. It is normal JavaScript closure behavior showing up in a render-driven system.',
+  },
+  {
+    id: 'react-keys',
+    type: 'qa',
+    category: 'React',
+    difficulty: 1,
+    minutes: 2,
+    question: 'Why do keys matter in React lists?',
+    shortAnswer:
+      'Keys tell React which item is which across renders so it can reconcile correctly. Bad keys lead to incorrect state preservation, weird UI bugs, and unnecessary remounting.',
+    deepAnswer:
+      'Keys are identity, not just warning suppression. If list items can move, be inserted, or be removed, unstable keys like array indexes can make React attach the wrong state to the wrong row. That is why keyed identity matters most when components are stateful or reorder frequently. Stable unique IDs are the best default whenever the data has them.',
+    takeaway: 'Keys are about identity and state continuity, not just performance.',
+  },
+  {
+    id: 'react-usememo-usecallback',
+    type: 'qa',
+    category: 'React',
+    difficulty: 2,
+    minutes: 3,
+    question: 'When do you use useMemo and useCallback?',
+    shortAnswer:
+      'Only when memoization solves a real problem like expensive recalculation or referential stability. I do not add them everywhere by default because they add complexity too.',
+    deepAnswer:
+      'A lot of frontend codebases get noisier because people memoize everything “just in case.” I prefer clarity first, then memoize hot paths or identity-sensitive edges. useMemo helps when recomputation is expensive or a stable derived value matters. useCallback matters when function identity affects memoized children, effect dependencies, or similar performance-sensitive boundaries.',
+    takeaway: 'Memoization is a tool, not a coding style.',
+  },
+  {
+    id: 'react-context-vs-redux',
+    type: 'qa',
+    category: 'React',
     difficulty: 2,
     minutes: 3,
     question: 'Context vs Zustand vs Redux — when?',
     shortAnswer:
-      'Context for relatively stable shared state (auth, theme, workspace). Zustand for interactive shared client state. Redux when the state model is large, heavily shared, and benefits from strict structure.',
+      'Context for relatively stable shared state like auth or theme. Zustand for interactive shared client state with lighter ceremony. Redux when the state model is large enough that stricter structure helps the team.',
     deepAnswer:
-      'Context re-renders every consumer when its value changes — fine for stable values, painful for thrashy ones. Zustand gives selective subscriptions with less ceremony. Redux shines with large shared state models where conventions help the team. Default: start local, move up only when coordination is real.',
-    sampleCode: `// Context: stable values
-const WorkspaceContext = createContext({ workspaceId: null })
-
-// Zustand: interactive shared state
-const useMarketStore = create((set) => ({
-  selectedMarket: null,
-  setSelectedMarket: (m) => set({ selectedMarket: m }),
-}))`,
-    takeaway: 'Context is easy to overuse. Ask: how shared AND how change-heavy?',
-    followUps: [
-      {
-        question: 'Why not just put all app state into context?',
-        answer:
-          'Because context is a delivery mechanism, not a performance strategy. When its value changes, every consumer re-renders. That is fine for stable values, but it gets painful for fast-changing or heavily shared state.',
-      },
-      {
-        question: 'When does context become painful?',
-        answer:
-          'Usually when updates are frequent, the value object changes often, or many consumers subscribe to it. At that point, performance and debuggability both suffer, and a store with selective subscriptions becomes a better fit.',
-      },
-      {
-        question: 'When would Redux be worth the extra ceremony?',
-        answer:
-          'When the shared state model is large, central to the product, and benefits from strong conventions, explicit events, and predictable structure across a bigger team. If the product complexity justifies the overhead, Redux can be a good trade.',
-      },
-    ],
+      'The more important answer is the decision process. Start local by default. Only lift state when multiple parts of the app really need coordinated access. Then ask how change-heavy it is and how much structure the team needs. Context is easy to overuse because it feels built in and simple, but it is not always the right fit for fast-changing shared state.',
+    takeaway: 'Tool choice should follow the shape of the state, not the popularity of the library.',
   },
   {
-    id: 'state-common-mistake',
+    id: 'react-custom-hooks',
     type: 'qa',
-    category: 'State',
-    difficulty: 1,
-    minutes: 2,
-    question: 'Common mistake teams make with state?',
-    shortAnswer:
-      'Making too much state global too early. Keep state as close as possible to where it is used; only lift it when there is a real coordination problem.',
-    deepAnswer:
-      'Global state feels "professional" but spreads logic out. Once global, every feature is tempted to depend on it, debugging gets noisier. Another mistake: using one solution for everything, mixing server data and client state together.',
-    takeaway: 'Global state is a cost. Pay it only when the coordination win is worth it.',
-  },
-  {
-    id: 'testing-honest',
-    type: 'qa',
-    category: 'Testing',
-    difficulty: 2,
-    minutes: 2,
-    question: 'What testing have you done at past companies?',
-    shortAnswer:
-      'Some places had lighter testing culture than I would prefer, so quality came through manual QA, product review, and careful iteration. If I set the bar, I would want E2E coverage on critical flows plus targeted integration/unit where logic is easy to break.',
-    deepAnswer:
-      'Be honest without sounding anti-testing. Lighter formal coverage taught me where apps actually break — async state, permissions, important workflows. If improving the story, start by protecting the flows that matter most to users and business, not testing everything equally.',
-    takeaway: 'Honest + improvement-oriented beats pretending every place had perfect coverage.',
-  },
-  {
-    id: 'testing-priority',
-    type: 'qa',
-    category: 'Testing',
+    category: 'React',
     difficulty: 2,
     minutes: 3,
-    question: 'What testing would you add first to an app with no coverage?',
+    question: 'When do you create a custom hook?',
     shortAnswer:
-      'Start with E2E on the most important user flows — best confidence per effort. Then integration tests around tricky component/data behavior. Unit tests for pure logic where they provide real value.',
+      'When it creates a real conceptual boundary or lets multiple components share stateful logic cleanly. Not just to hide lines of code.',
     deepAnswer:
-      'E2E protects what users actually do — if checkout or placing a bet breaks, 40 passing unit tests do not matter. Then integration for brittle UI + async. Unit surgically for pure logic, not as a first answer to every testing question.',
-    sampleCode: `// Priority order
-// 1. E2E: can a user complete the main workflow?
-// 2. Integration: does this component + data interaction work?
-// 3. Unit: does this pure helper hold up?`,
-    takeaway: 'Interviewers want prioritization, not "we should test everything."',
-    followUps: [
-      {
-        question: 'Why would you start with E2E instead of unit tests?',
-        answer:
-          'Because if the core user workflow is broken, a pile of passing unit tests does not help much. E2E gives the highest confidence per test when the app currently has no coverage and you need to protect business-critical behavior fast.',
-      },
-      {
-        question: 'What kinds of flows deserve E2E coverage first?',
-        answer:
-          'Anything tied to revenue, activation, retention, or trust. Sign-up, checkout, authentication, transaction flows, or the main product workflow are usually first. I start with what would hurt the business most if it broke tomorrow.',
-      },
-      {
-        question: 'What would you leave untested at first?',
-        answer:
-          'Low-risk presentational details, trivial wrappers, and areas with little business impact. In an app with no test coverage, prioritization matters more than completeness at the start.',
-      },
-    ],
+      'A custom hook is useful when the abstraction makes the calling component easier to understand. Typical cases are subscriptions, async state coordination, repeated form behavior, or domain-specific UI logic. The mistake is creating vague hooks that just bury complexity. Good hooks usually have a clear responsibility and a name that maps to a real idea in the product.',
+    takeaway: 'Hooks should clarify behavior, not just relocate it.',
   },
   {
-    id: 'testing-levels',
+    id: 'react-strict-mode',
     type: 'qa',
-    category: 'Testing',
-    difficulty: 1,
-    minutes: 2,
-    question: 'Unit vs integration vs E2E — explain.',
-    shortAnswer:
-      'Unit: isolated logic. Integration: components or systems working together. E2E: critical user flows in the real app. Use the level that matches the risk.',
-    deepAnswer:
-      'Unit: small, deterministic, easy to isolate (formatter, helper). Integration: bug risk from pieces interacting (UI + async + state). E2E: "can the user complete the workflow?" A healthy strategy uses all three, unevenly — depth should reflect the failure mode.',
-    takeaway: 'The right test level depends on the bug you are preventing.',
-  },
-  {
-    id: 'wagmi-viem-ethers',
-    type: 'qa',
-    category: 'Web3',
-    difficulty: 3,
-    minutes: 4,
-    question: 'ethers.js vs wagmi vs viem?',
-    shortAnswer:
-      'Different layers. viem: low-level TypeScript-first EVM client. wagmi: React hooks for wallet/app-level onchain UX, built on viem. ethers: older general-purpose library, still widely used. Modern React today: wagmi + viem unless the existing codebase pushes toward ethers.',
-    deepAnswer:
-      'Understand the layering, not just names. viem for strongly typed reads/writes/utilities in modern TS. wagmi higher up — wallet connection, hooks, chain/account state, common onchain UX. ethers older and widely adopted, still valid especially in existing codebases. Show you understand where each sits and why.',
-    sampleCode: `// viem: low-level read
-const publicClient = createPublicClient({
-  chain: mainnet,
-  transport: http(),
-})
-
-// wagmi: React hooks
-const { address, isConnected } = useAccount()
-const { data } = useReadContract({
-  address, abi, functionName: 'balanceOf',
-  args: [userAddress],
-})`,
-    takeaway: 'Web3 tooling questions are usually about layers and tradeoffs.',
-    followUps: [
-      {
-        question: 'Why would you choose wagmi plus viem in a React app?',
-        answer:
-          'Because they fit the stack cleanly. viem handles low-level EVM interaction with strong TypeScript ergonomics, and wagmi adds React-specific wallet and contract hooks on top. Together they give a modern React web3 setup with less glue code.',
-      },
-      {
-        question: 'When would ethers still be the better choice?',
-        answer:
-          'Usually in an existing codebase that is already deeply invested in ethers, or when the surrounding tooling and team familiarity make migration not worth it. I would not force a tooling rewrite just to be trendy.',
-      },
-      {
-        question: 'What does wagmi solve that viem alone does not?',
-        answer:
-          'wagmi gives you React-ready hooks and wallet-aware state patterns like account, network, connection, reads, and writes. viem is lower-level and great on its own, but wagmi removes a lot of repetitive React integration work.',
-      },
-    ],
-  },
-  {
-    id: 'viem-over-ethers',
-    type: 'qa',
-    category: 'Web3',
+    category: 'React',
     difficulty: 2,
     minutes: 2,
-    question: 'Why pick viem over ethers?',
+    question: 'Why does React Strict Mode sometimes run things twice in development?',
     shortAnswer:
-      'viem feels modern and TypeScript-native — better typing and ergonomics in new apps. ethers has massive ecosystem adoption, so not a dogmatic choice in existing codebases.',
+      'Strict Mode intentionally re-invokes some logic in development to expose unsafe side effects and cleanup bugs. It is a development-only pressure test, not production behavior.',
     deepAnswer:
-      'viem is designed for modern TS — typing is better, client model clearer, works nicely with wagmi. ethers has enormous adoption, good docs, ecosystem inertia. Frame as "default for greenfield" vs "reasonable in ethers-heavy codebases," not "ethers bad."',
-    takeaway: 'Balanced tradeoff language beats dogmatic tool takes.',
+      'The practical answer is that Strict Mode helps you discover code that is not resilient to remounting or repeated effects. If an effect leaks subscriptions, a component mutates state during render, or imperative setup assumes it only runs once, Strict Mode makes that pain visible earlier. The right response is usually not to fight Strict Mode but to make the code more idempotent and cleanup-safe.',
+    takeaway: 'If Strict Mode reveals a bug, it usually found a real fragility.',
   },
-  {
-    id: 'web3-wallet-client',
-    type: 'qa',
-    category: 'Web3',
-    difficulty: 2,
-    minutes: 2,
-    question: 'Public client vs wallet client?',
-    shortAnswer:
-      'Public client: chain reads and general RPC. Wallet client: represents a connected wallet, used for signing or sending user-authorized transactions.',
-    deepAnswer:
-      'Not every interaction should involve the user wallet. Reads and contract queries go through a public client (no signing). A wallet client is tied to a user-controlled account — signing messages, sending transactions. Shows you understand read-only vs user-authorized actions.',
-    sampleCode: `// public client = reads
-const publicClient = createPublicClient({
-  chain, transport: http()
-})
 
-// wallet client = user-authorized writes
-const walletClient = createWalletClient({
-  chain, transport: custom(window.ethereum)
-})`,
-    takeaway: 'Public for chain data. Wallet for user-authorized actions.',
-    followUps: [
-      {
-        question: 'Why not do all reads through the wallet client?',
-        answer:
-          'Because reads do not require user authorization, and tying them to the wallet adds unnecessary coupling and friction. Public clients are cheaper, simpler, and better suited for general chain reads.',
-      },
-      {
-        question: 'What UX problems happen if you blur reads and writes together?',
-        answer:
-          'The app can feel more intrusive than it should. Users may get prompted too often, and the UI becomes harder to reason about because safe read-only actions are mixed with signing or transaction behavior.',
-      },
-      {
-        question: 'Where would you create these clients in a frontend app?',
-        answer:
-          'Usually in a shared web3 or infrastructure layer, then expose them through hooks or app-level providers so components do not have to rebuild low-level clients everywhere.',
-      },
-    ],
-  },
   {
-    id: 'ai-philosophy',
+    id: 'dom-flex-vs-grid',
     type: 'qa',
-    category: 'Architecture',
+    category: 'DOM & CSS',
     difficulty: 1,
     minutes: 2,
-    question: 'How do you think about AI-assisted engineering?',
+    question: 'Flexbox vs Grid — when?',
     shortAnswer:
-      'Heavy use for exploration, scaffolding, implementation speed, pattern comparison. Still treat architecture, debugging, product judgment, and final quality as human-owned. Leverage is real, but only if someone strong is steering.',
+      'Flexbox is best for one-dimensional layout. Grid is best for two-dimensional layout. I use the one that matches the mental model of the UI instead of forcing one system everywhere.',
     deepAnswer:
-      'Strongest answer: "I know where it helps and where I still need judgment." AI is great for compressing iteration, scaffolding, first drafts, repetitive work. Dangerous when it makes architecture/product/quality decisions without strong review. Pro-AI, not outsourcing taste.',
-    takeaway: 'AI gives leverage, but judgment still matters.',
+      'Flexbox is great when the main problem is distributing items along one axis, like navs, button groups, or aligning content in a row or column. Grid is stronger when rows and columns both matter, like dashboards, card walls, or named layout regions. The best answer is not just definitions. It is showing that you pick layout tools based on structure, not habit.',
+    takeaway: 'Choose the layout model that matches the problem’s geometry.',
   },
   {
-    id: 'frontend-arch',
+    id: 'dom-event-bubbling',
     type: 'qa',
-    category: 'Architecture',
+    category: 'DOM & CSS',
+    difficulty: 2,
+    minutes: 3,
+    question: 'Explain event bubbling, capturing, and delegation.',
+    shortAnswer:
+      'Events travel down during capture and back up during bubble. Delegation attaches one handler higher in the tree and uses event.target or closest() to handle many child interactions efficiently.',
+    deepAnswer:
+      'Bubbling is usually the part frontend interviews care about because it explains why parent handlers fire after child handlers. Capturing is the earlier phase on the way down. Delegation is useful when you have many interactive children or dynamic content, because a single handler on an ancestor can manage them. In practical frontend work, this matters for performance, dynamic lists, and debugging unexpected interaction behavior.',
+    sampleCode: `container.addEventListener('click', (event) => {
+  const button = (event.target as HTMLElement).closest('[data-action]')
+  if (!button) return
+  doSomething(button.getAttribute('data-action'))
+})`,
+    takeaway: 'Know the model and at least one real use case like delegation.',
+  },
+  {
+    id: 'dom-positioning-zindex',
+    type: 'qa',
+    category: 'DOM & CSS',
+    difficulty: 2,
+    minutes: 3,
+    question: 'Why does z-index sometimes “not work”?',
+    shortAnswer:
+      'Because z-index only works within stacking contexts, and new stacking contexts can be created by positioning, opacity, transforms, filters, and other properties.',
+    deepAnswer:
+      'People often think z-index is global, but it is scoped by stacking context. If two elements live in different stacking contexts, a huge z-index on one may still sit below another element higher in its own context. When debugging, I usually inspect ancestors for position, transform, opacity, isolation, or other properties that create new stacking contexts. That is usually where the real issue is.',
+    takeaway: 'When z-index seems broken, look for stacking context boundaries first.',
+  },
+  {
+    id: 'dom-specificity',
+    type: 'qa',
+    category: 'DOM & CSS',
+    difficulty: 1,
+    minutes: 2,
+    question: 'How do you think about CSS specificity?',
+    shortAnswer:
+      'Specificity is the priority system CSS uses when multiple rules match the same element. I try to keep specificity low and predictable so styling stays easy to override without resorting to !important.',
+    deepAnswer:
+      'This is less about memorizing exact scoring and more about keeping a sane system. Deep selectors, IDs, and !important often make a codebase brittle because every future change has to fight the old specificity. Whether I am using CSS modules, Tailwind, or another system, I still want predictable layering so component styles do not become a contest of escalating selector weight.',
+    takeaway: 'Low, predictable specificity makes teams faster.',
+  },
+  {
+    id: 'dom-accessibility',
+    type: 'qa',
+    category: 'DOM & CSS',
+    difficulty: 2,
+    minutes: 3,
+    question: 'What accessibility basics do you keep in mind when building interactive UI?',
+    shortAnswer:
+      'Use semantic elements first, make everything keyboard reachable, preserve focus visibility, ensure labels are meaningful, and use ARIA only when native HTML is not enough.',
+    deepAnswer:
+      'A strong frontend answer here is practical: buttons should be buttons, not clickable divs. Focus states should not disappear. Modals should manage focus intentionally. Form fields need proper labels. Keyboard users should be able to operate the UI without guessing. ARIA can help, but the first move is usually better HTML, not more attributes. Apple is very likely to care about this because it aligns with product quality, not just compliance.',
+    takeaway: 'Accessibility is usually better HTML plus thoughtful interaction states.',
+  },
+  {
+    id: 'dom-reflow-repaint',
+    type: 'qa',
+    category: 'DOM & CSS',
     difficulty: 3,
     minutes: 3,
-    question: 'What makes a frontend architecture hold up?',
+    question: 'What is the difference between reflow and repaint, and when do you care?',
     shortAnswer:
-      'Clear boundaries, shared patterns, simplest abstractions that let the team move fast. Predictable data flow, reusable UI primitives, no pile of one-off solutions.',
+      'Reflow happens when layout must be recalculated. Repaint updates visual styling without changing layout. I care when UI is janky or when repeated DOM reads and writes are causing performance problems.',
     deepAnswer:
-      'Architecture holds up when it helps the team move consistently, not when it looks clever. Clear boundaries prevent every feature from inventing patterns. Shared primitives keep product quality and speed aligned. Predictable data flow keeps state bugs from multiplying. Better architecture often removes accidental complexity, not adds layers.',
-    takeaway: 'Good architecture helps the team stay coherent as the product grows.',
-    followUps: [
-      {
-        question: 'What kinds of abstractions become expensive over time?',
-        answer:
-          'Usually the ones that hide too much, solve hypothetical future problems, or make simple work harder than it should be. Over-engineered base components and generic utility layers are common offenders.',
-      },
-      {
-        question: 'How do you know when the architecture is too complicated?',
-        answer:
-          'When simple features take too long to ship, engineers avoid touching key areas, or new people cannot tell where things should live. Good architecture should reduce friction, not create it.',
-      },
-      {
-        question: 'How would you improve an architecture without freezing product work?',
-        answer:
-          'Incrementally. I would identify the most painful hotspots, improve patterns while touching active areas, and avoid big-bang rewrites unless the current system is truly blocking the team.',
-      },
-    ],
+      'You do not need a browser-engine lecture here. The practical answer is that layout-affecting changes are more expensive because the browser may need to recalculate geometry. Then if you mix layout reads and writes in the wrong order, you can cause layout thrashing. In UI work this matters most for animations, scroll-linked interactions, big lists, and anything that feels visibly sluggish.',
+    takeaway: 'Frontend performance questions usually want practical debugging instincts, not browser trivia.',
   },
   {
-    id: 'drill-tictactoe',
-    type: 'drill',
-    category: 'Drills',
-    difficulty: 2,
-    minutes: 5,
-    prompt: 'Implement getWinner(board) for Tic-Tac-Toe. board is a 9-item array of X, O, or null.',
-    hint1: 'There are only 8 winning lines. Hardcode them instead of deriving live.',
-    hint2: 'Loop index triplets and check board[a] && board[a] === board[b] && board[a] === board[c].',
-    answer: `const WINNING_LINES = [
-  [0,1,2], [3,4,5], [6,7,8],
-  [0,3,6], [1,4,7], [2,5,8],
-  [0,4,8], [2,4,6],
-]
-
-function getWinner(board) {
-  for (const [a, b, c] of WINNING_LINES) {
-    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-      return board[a]
-    }
-  }
-  return null
-}`,
-    takeaway: 'Under pressure, simplify. Represent 8 lines explicitly and move on.',
+    id: 'dom-box-model',
+    type: 'qa',
+    category: 'DOM & CSS',
+    difficulty: 1,
+    minutes: 2,
+    question: 'Explain the CSS box model.',
+    shortAnswer:
+      'An element’s box is content, padding, border, and margin. By default width and height apply to the content box, but with box-sizing: border-box they include padding and border too.',
+    deepAnswer:
+      'This matters because layout bugs often come from forgetting what is included in width calculations. Most teams sensibly set box-sizing: border-box globally because it makes components easier to size predictably. The interview answer should be crisp and grounded in real layout behavior, not overlong.',
+    takeaway: 'box-sizing: border-box is usually the sane default.',
   },
+
+  {
+    id: 'arch-state-decision-tree',
+    type: 'qa',
+    category: 'Architecture',
+    difficulty: 2,
+    minutes: 3,
+    question: 'How do you choose between local state, URL state, server state, and shared client state?',
+    shortAnswer:
+      'I classify the state first. Local UI state stays local. Shareable/bookmarkable state often belongs in the URL. Backend-owned data is server state. Shared client state is the smallest bucket and should be introduced only when multiple areas truly need it.',
+    deepAnswer:
+      'This is one of the strongest senior frontend answers because it shows structure. A lot of teams reach for one tool first and ask questions later. I prefer to classify the state by ownership and behavior. That leads to cleaner solutions and avoids stuffing everything into one global system. The best part is it also makes tradeoffs easier to explain to other engineers and PMs.',
+    takeaway: 'Classify state before choosing tools.',
+  },
+  {
+    id: 'arch-loading-empty-error',
+    type: 'qa',
+    category: 'Architecture',
+    difficulty: 2,
+    minutes: 2,
+    question: 'How do you think about loading, empty, and error states?',
+    shortAnswer:
+      'They are product states, not afterthoughts. I want them designed intentionally because they shape how trustworthy the app feels under real conditions.',
+    deepAnswer:
+      'A lot of perceived product quality lives in non-happy-path states. If loading is jumpy, users think the app is slow. If empty states are vague, people think it is broken. If errors are generic, trust drops fast. Strong frontend systems treat these as first-class patterns rather than leaving each feature team to improvise.',
+    takeaway: 'Great frontend work includes the transitions and failure modes, not just the happy path.',
+  },
+  {
+    id: 'arch-testing-priority',
+    type: 'qa',
+    category: 'Architecture',
+    difficulty: 2,
+    minutes: 3,
+    question: 'If an app has almost no tests, what would you add first?',
+    shortAnswer:
+      'Start with end-to-end coverage on the highest-value user flows. Then add integration tests around brittle UI/data interactions. Use unit tests surgically for pure logic where they provide real value.',
+    deepAnswer:
+      'This answer is about prioritization, not ideology. If the product’s critical workflow is broken, a pile of small unit tests does not save you. E2E often gives the best confidence per effort when there is no safety net yet. After that, add integration tests where the UI and async behavior are easy to break. Unit tests come in where logic is isolated and worth protecting. Apple may not spend a full round on testing, but this is a good senior signal.',
+    takeaway: 'Protect business-critical behavior first.',
+  },
+  {
+    id: 'arch-component-boundaries',
+    type: 'qa',
+    category: 'Architecture',
+    difficulty: 2,
+    minutes: 3,
+    question: 'What makes a frontend architecture hold up over time?',
+    shortAnswer:
+      'Clear boundaries, predictable data flow, shared UI primitives, and the discipline to avoid one-off patterns unless they are truly justified.',
+    deepAnswer:
+      'Good architecture is not cleverness, it is coherence. Teams move faster when state ownership is clear, components have obvious responsibilities, shared patterns are trustworthy, and product logic is not scattered randomly across the tree. The strongest architectures usually reduce accidental complexity instead of adding layers for theoretical purity.',
+    takeaway: 'Architecture should make the team faster and the product more consistent.',
+  },
+  {
+    id: 'arch-pixel-perfect',
+    type: 'qa',
+    category: 'Architecture',
+    difficulty: 2,
+    minutes: 3,
+    question: 'What does “pixel perfect” mean to you without becoming dogmatic?',
+    shortAnswer:
+      'It means respecting the intent of the design and delivering a polished, trustworthy UI, while still making sensible engineering decisions when browsers, content, or accessibility realities require adaptation.',
+    deepAnswer:
+      'For this Apple role, this is worth being ready for because the job description explicitly calls out pixel perfect designs. The best answer is not “I worship Figma measurements.” It is that details matter because they compound into user trust. Spacing, alignment, states, motion, typography, and interaction consistency all matter. But I also know where exact visual fidelity should yield to better semantics, responsiveness, or accessibility.',
+    takeaway: 'Pixel perfect should mean high craft, not thoughtless literalism.',
+  },
+  {
+    id: 'arch-localization',
+    type: 'qa',
+    category: 'Architecture',
+    difficulty: 2,
+    minutes: 3,
+    question: 'What do you keep in mind for localization-ready frontend UI?',
+    shortAnswer:
+      'Text expands, layouts break, dates and numbers differ, and hardcoded assumptions show up fast. I try to design flexible components and avoid UI that only works for short English strings.',
+    deepAnswer:
+      'This matters because the Apple role mentions localization and worldwide partners. Senior frontend work anticipates translation, text growth, right-to-left possibilities, date/number formatting, and copy that arrives later than design. The practical mindset is to avoid brittle fixed-width UI, concatenate strings carefully, and build components that tolerate content variation instead of assuming the English comp is the truth forever.',
+    takeaway: 'Localization is a layout and systems problem as much as a content problem.',
+  },
+
   {
     id: 'drill-debounce',
     type: 'drill',
@@ -360,8 +459,8 @@ function getWinner(board) {
     difficulty: 2,
     minutes: 5,
     prompt: 'Implement debounce(fn, delay).',
-    hint1: 'You need a timer variable living in a closure.',
-    hint2: 'Clear the old timeout before scheduling a new one. Use function(...args) so `this` can be forwarded.',
+    hint1: 'You need a timer variable that lives in a closure.',
+    hint2: 'Clear the old timer before setting a new one. Use function(...args) if you want to preserve this.',
     answer: `function debounce(fn, delay) {
   let timerId
 
@@ -373,302 +472,7 @@ function getWinner(board) {
     }, delay)
   }
 }`,
-    takeaway: 'Most debounce bugs are closure issues + forgetting args/this.',
-  },
-  {
-    id: 'drill-state-classify',
-    type: 'drill',
-    category: 'Drills',
-    difficulty: 1,
-    minutes: 3,
-    prompt:
-      'Classify: modal open, current user, list of bets from API, active tab, wallet connection, leaderboard data, selected sportsbook filter used across pages.',
-    hint1: 'Comes from backend? → probably server state.',
-    hint2: 'Multiple parts of the app need the client-owned value? → probably shared app state.',
-    answer: `Local UI state:
-  • modal open
-  • active tab
-
-Server state:
-  • list of bets from API
-  • leaderboard data
-
-Shared app state:
-  • current user/session context
-  • wallet connection
-  • selected sportsbook filter`,
-    takeaway: 'Local / server / shared client — a clean default heuristic.',
-  },
-  {
-    id: 'drill-testing-strategy',
-    type: 'drill',
-    category: 'Drills',
-    difficulty: 2,
-    minutes: 4,
-    prompt:
-      'A company asks how you would improve testing in a frontend app with almost no coverage. Give a phased plan.',
-    hint1: 'Do not say "test everything." Start with highest-risk workflows.',
-    hint2: 'E2E first for core flows → integration for brittle UI/data → unit for isolated logic.',
-    answer: `Phase 1: Identify 3-5 most important user journeys; add E2E coverage.
-Phase 2: Add integration tests around tricky component behavior and async/data.
-Phase 3: Add unit tests for pure logic where they protect real complexity.
-Phase 4: Make testing part of the normal shipping path, not an afterthought.`,
-    takeaway: 'Interviewers want sensible prioritization, not "test everything."',
-  },
-  {
-    id: 'react-controlled-vs-uncontrolled',
-    type: 'qa',
-    category: 'State',
-    difficulty: 1,
-    minutes: 2,
-    question: 'Controlled vs uncontrolled inputs?',
-    shortAnswer:
-      'Controlled inputs keep the source of truth in React state. Uncontrolled inputs let the DOM hold the current value and you read it through refs or form submission. I default to controlled inputs when the UI depends on the value while typing, and uncontrolled when I want simpler wiring and do not need constant React-driven updates.',
-    deepAnswer:
-      'Controlled inputs are great when validation, formatting, conditional UI, or derived state depends on the value changing in real time. The tradeoff is more state wiring and more rerenders. Uncontrolled inputs can be simpler and cheaper when React does not need to react to every keystroke, especially in basic forms or when using native form submission patterns. The real question is whether React needs to own the value continuously or only at specific moments.',
-    sampleCode: `// controlled
-const [email, setEmail] = useState('')
-<input value={email} onChange={(e) => setEmail(e.target.value)} />
-
-// uncontrolled
-const inputRef = useRef<HTMLInputElement>(null)
-<input ref={inputRef} defaultValue="" />`,
-    takeaway: 'Use controlled when UI logic depends on the value. Use uncontrolled when React does not need to care on every keystroke.',
-    followUps: [
-      {
-        question: 'What are the tradeoffs of controlled inputs?',
-        answer:
-          'They give you maximum React control, which is great for validation and dynamic UI, but they also add state wiring and more rerenders. That is often worth it, but not always necessary.',
-      },
-      {
-        question: 'Why can uncontrolled inputs be simpler?',
-        answer:
-          'Because the DOM already knows how to manage input state. If React does not need to react to every keystroke, letting the browser own the value can reduce complexity and boilerplate.',
-      },
-      {
-        question: 'When would a form library change the answer?',
-        answer:
-          'Libraries like React Hook Form often lean on uncontrolled inputs internally for performance and ergonomics, so they can give you some of the best parts of both approaches depending on the form complexity.',
-      },
-    ],
-  },
-  {
-    id: 'react-derived-state',
-    type: 'qa',
-    category: 'State',
-    difficulty: 2,
-    minutes: 3,
-    question: 'What is derived state and when should you avoid storing it?',
-    shortAnswer:
-      'Derived state is data you can compute from existing state or props. I usually avoid storing it separately because duplicated state gets out of sync. If a value can be calculated from the current inputs, I would rather compute it than maintain a second source of truth.',
-    deepAnswer:
-      'A common frontend bug pattern is storing both the source data and some calculated version of it, then forgetting to update one when the other changes. That creates synchronization bugs fast. Derived values like filtered lists, totals, display labels, or validation state are often better computed on render or memoized if they are expensive. I only store derived state when recomputing it is truly costly or when I need to snapshot it intentionally for workflow reasons.',
-    sampleCode: `const filteredItems = useMemo(() => {
-  return items.filter((item) => item.name.includes(search))
-}, [items, search])`,
-    takeaway: 'If it can be computed from current state or props, it usually should not be its own stored state.',
-    followUps: [
-      {
-        question: 'When would you intentionally store derived state anyway?',
-        answer:
-          'When I need a deliberate snapshot for a workflow, or when recalculating is truly expensive and storing the value is simpler than recomputing it repeatedly. But I treat that as the exception, not the default.',
-      },
-      {
-        question: 'How can derived state create bugs?',
-        answer:
-          'Because duplicated truth drifts. If the source changes and the derived copy is not updated correctly, the UI shows stale or inconsistent information.',
-      },
-      {
-        question: 'When should you memoize derived values?',
-        answer:
-          'When the computation is expensive enough to matter or when referential stability affects child renders. If it is cheap, I usually prefer simpler code over memoization.',
-      },
-    ],
-  },
-  {
-    id: 'react-custom-hooks',
-    type: 'qa',
-    category: 'Architecture',
-    difficulty: 2,
-    minutes: 3,
-    question: 'When would you make a custom hook?',
-    shortAnswer:
-      'I make a custom hook when I want to reuse stateful logic or side-effect logic across components, or when I want to simplify a component by extracting non-visual logic into a clearer abstraction.',
-    deepAnswer:
-      'A custom hook is useful when the same logic appears in multiple places, or when a component is getting noisy because it is mixing rendering with data fetching, event wiring, subscriptions, or state transitions. The important thing is that a custom hook should represent a real conceptual boundary, not just hide lines of code. If the abstraction makes the calling component easier to understand and the hook has a clear responsibility, it is usually worth it. If it just buries complexity without clarifying anything, it is probably premature.',
-    sampleCode: `function useDebouncedValue<T>(value: T, delay: number) {
-  const [debounced, setDebounced] = useState(value)
-
-  useEffect(() => {
-    const id = setTimeout(() => setDebounced(value), delay)
-    return () => clearTimeout(id)
-  }, [value, delay])
-
-  return debounced
-}`,
-    takeaway: 'Custom hooks should create a clearer boundary, not just move code around.',
-    followUps: [
-      {
-        question: 'What is a sign that a custom hook is premature?',
-        answer:
-          'If it exists only to hide code rather than clarify responsibility, it is probably premature. Good hooks represent a real reusable concept, not just line-count reduction.',
-      },
-      {
-        question: 'What logic belongs in a hook versus a component?',
-        answer:
-          'Stateful logic, subscriptions, fetching, and behavior that is reusable or conceptually separate often belong in a hook. Rendering and layout decisions should usually stay in the component.',
-      },
-      {
-        question: 'When does a hook become too generic?',
-        answer:
-          'When it stops mapping to a real product or technical concept and starts becoming a vague utility nobody understands. Over-generalized hooks are often harder to maintain than duplicated code.',
-      },
-    ],
-  },
-  {
-    id: 'react-usememo-usecallback',
-    type: 'qa',
-    category: 'Architecture',
-    difficulty: 2,
-    minutes: 3,
-    question: 'When do you use useMemo and useCallback?',
-    shortAnswer:
-      'I use them when referential stability actually matters or when a calculation is expensive enough to justify memoization. I do not add them everywhere by default because they also add complexity.',
-    deepAnswer:
-      'Memoization is useful when there is a measurable problem to solve. useMemo helps avoid recalculating expensive derived values on every render. useCallback is useful when function identity matters, like when passing callbacks into memoized children or effect dependencies. But a lot of apps get worse when people memoize everything out of habit, because it makes the code harder to reason about without real performance benefit. My default is clarity first, then memoize the hot paths or identity-sensitive edges.',
-    sampleCode: `const expensiveResult = useMemo(() => {
-  return computeLargeDataset(items)
-}, [items])
-
-const handleSelect = useCallback((id: string) => {
-  setSelectedId(id)
-}, [])`,
-    takeaway: 'Memoization is for real performance or identity problems, not default style.',
-    followUps: [
-      {
-        question: 'How can overusing useMemo or useCallback make code worse?',
-        answer:
-          'It adds indirection and dependency complexity without guaranteed performance benefit. The result is harder-to-read code that may not actually be faster.',
-      },
-      {
-        question: 'When does function identity actually matter?',
-        answer:
-          'Mostly when passing callbacks to memoized children, using them in effect dependencies, or relying on referential equality in performance-sensitive cases.',
-      },
-      {
-        question: 'How would you prove a component needs memoization?',
-        answer:
-          'By measuring. I would use React DevTools profiler, real render counts, or visible UI slowness rather than assuming memoization is needed because the code looks complex.',
-      },
-    ],
-  },
-  {
-    id: 'frontend-ssr-csr-isr',
-    type: 'qa',
-    category: 'Architecture',
-    difficulty: 2,
-    minutes: 4,
-    question: 'How do you think about SSR vs CSR vs SSG vs ISR?',
-    shortAnswer:
-      'I choose based on freshness needs, SEO needs, and interaction needs. SSR helps when content must be fresh at request time and SEO matters. CSR is fine for highly interactive app surfaces where the shell can load client-side. SSG is great for mostly static content. ISR is useful when content can be stale briefly but should refresh over time without full rebuilds.',
-    deepAnswer:
-      'This is really about matching the rendering model to the product requirement. If the page is marketing or content-heavy and does not change often, static generation is usually ideal. If SEO matters and the data changes on request, SSR can make sense. If the surface is mostly an authenticated app where interaction matters more than initial crawlability, CSR is often fine. ISR sits in the middle for pages where freshness matters but full request-time rendering is unnecessary. A strong answer shows you are not dogmatic and that you care about tradeoffs like latency, caching, complexity, and SEO.',
-    takeaway: 'Pick the rendering model based on freshness, SEO, and interaction needs, not fashion.',
-    followUps: [
-      {
-        question: 'Why would you choose CSR for an authenticated app?',
-        answer:
-          'Because SEO is usually less important there, and the product is often highly interactive after login. In that case, a client-rendered shell can be simpler and perfectly appropriate.',
-      },
-      {
-        question: 'What are the tradeoffs of SSR?',
-        answer:
-          'SSR can improve freshness and SEO, but it also adds request-time work, caching complexity, and sometimes infrastructure cost. It is useful, but not free.',
-      },
-      {
-        question: 'When does ISR beat full SSR?',
-        answer:
-          'When the content needs to stay reasonably fresh but does not need to be regenerated on every request. ISR gives you a nice middle ground between static performance and dynamic freshness.',
-      },
-    ],
-  },
-  {
-    id: 'frontend-error-boundaries',
-    type: 'qa',
-    category: 'Architecture',
-    difficulty: 1,
-    minutes: 2,
-    question: 'What are error boundaries and what do they not catch?',
-    shortAnswer:
-      'Error boundaries catch render-time errors in the component tree below them and let you render a fallback UI. They do not catch event-handler errors, async promise errors, or server-side errors automatically.',
-    deepAnswer:
-      'Error boundaries are useful because they stop one broken subtree from crashing the whole React app. They are best for isolating UI failures and giving the user some fallback instead of a blank page. But they are not a universal exception system. Errors in click handlers, async requests, or arbitrary business logic usually need their own handling path. Interviewers often want to know that you understand both their value and their limits.',
-    takeaway: 'Error boundaries protect render trees, not every kind of runtime failure.',
-  },
-  {
-    id: 'frontend-folder-structure',
-    type: 'qa',
-    category: 'Architecture',
-    difficulty: 2,
-    minutes: 3,
-    question: 'How do you think about folder structure in a frontend app?',
-    shortAnswer:
-      'I want the structure to reflect how the team thinks about the product. Usually that means organizing around features or domains, not just dumping everything by file type. Shared primitives can live centrally, but product logic should usually stay near the feature that owns it.',
-    deepAnswer:
-      'Folder structure is really about navigability and ownership. Type-based structures like components/hooks/utils can work at small scale, but they often become dumping grounds as the app grows. Feature-oriented structure tends to hold up better because the code for a workflow lives near the workflow. I still keep shared UI primitives, design system pieces, and cross-cutting libraries in common places, but I want feature-level logic, tests, and hooks to stay near the area that owns them. Good structure helps new engineers answer “where would this live?” quickly.',
-    takeaway: 'Structure should mirror the product and team ownership model, not just file types.',
-  },
-  {
-    id: 'frontend-loading-empty-error',
-    type: 'qa',
-    category: 'Architecture',
-    difficulty: 2,
-    minutes: 2,
-    question: 'How do you think about loading, empty, and error states?',
-    shortAnswer:
-      'They are part of the product, not polish. I want them designed intentionally and consistently because they shape how trustworthy the app feels under real conditions.',
-    deepAnswer:
-      'A lot of product quality comes from non-happy-path states. If loading feels inconsistent, users perceive the app as slow even when it is not. If empty states are vague, the UI feels broken instead of informative. If errors are generic, users lose trust fast. I usually want a consistent pattern library for loading, empty, error, retry, and partial-data states so teams do not reinvent them every time. That is both a product-quality and architecture decision.',
-    takeaway: 'Real users spend more time in transitional states than designers often admit.',
-  },
-  {
-    id: 'testing-rtl-vs-playwright',
-    type: 'qa',
-    category: 'Testing',
-    difficulty: 2,
-    minutes: 3,
-    question: 'How do you think about React Testing Library vs Playwright?',
-    shortAnswer:
-      'They solve different levels of confidence. React Testing Library is good for component and interaction testing close to the UI layer. Playwright is better for high-confidence end-to-end user workflows in the real app.',
-    deepAnswer:
-      'React Testing Library is great when I want to test how a component behaves from the user perspective without booting the whole application. It is especially useful for forms, validation, conditional rendering, and interaction behavior. Playwright is more expensive but gives much stronger confidence for critical workflows because it exercises the real app in a browser. I usually do not treat them as substitutes. They complement each other. RTL helps me test UI behavior cheaply, while Playwright protects the workflows that matter most.',
-    takeaway: 'RTL is for component-level confidence. Playwright is for workflow-level confidence.',
-  },
-  {
-    id: 'testing-flaky-tests',
-    type: 'qa',
-    category: 'Testing',
-    difficulty: 2,
-    minutes: 2,
-    question: 'What causes flaky tests and how do you reduce them?',
-    shortAnswer:
-      'Flaky tests usually come from timing assumptions, shared state leakage, nondeterministic data, network dependence, or tests relying on implementation details. I reduce them by making test setup deterministic, avoiding arbitrary waits, isolating state, and testing from the user perspective instead of brittle internals.',
-    deepAnswer:
-      'Flakiness is often a signal that the test is too coupled to unstable timing or environment details. Arbitrary sleep-based waits are a classic cause. So are tests that depend on previous test state, real network calls, or data that changes underneath them. I try to prefer explicit waiting on real conditions, stable fixtures, isolated setup/teardown, and user-facing assertions. Good testing culture is as much about reliability and trust as it is about raw coverage.',
-    takeaway: 'A flaky test suite trains engineers to ignore signals, which defeats the point of having tests.',
-  },
-  {
-    id: 'testing-what-not-to-test',
-    type: 'qa',
-    category: 'Testing',
-    difficulty: 1,
-    minutes: 2,
-    question: 'What should you usually avoid testing heavily?',
-    shortAnswer:
-      'I avoid over-testing implementation details, trivial presentational components, or code paths that provide little value relative to maintenance cost. I care more about protecting meaningful behavior than maximizing test count.',
-    deepAnswer:
-      'The goal of testing is confidence, not test volume. If a component is purely presentational and easy to verify visually, heavy tests may not buy much. If a test asserts internal implementation details rather than user-visible behavior, it often becomes brittle during refactors. I would rather spend that energy on meaningful workflows, tricky logic, or interaction patterns that actually break in production. A smaller, trustworthy test suite is better than a giant noisy one.',
-    takeaway: 'Test behavior and risk, not every line of code just because it exists.',
+    takeaway: 'The classic gotchas are closure scope plus preserving args and this.',
   },
   {
     id: 'drill-throttle',
@@ -677,8 +481,8 @@ const handleSelect = useCallback((id: string) => {
     difficulty: 2,
     minutes: 5,
     prompt: 'Implement throttle(fn, delay).',
-    hint1: 'You need to remember whether execution is currently blocked.',
-    hint2: 'Use a timer or timestamp guard so calls within the delay window are ignored or deferred depending on your version.',
+    hint1: 'Track whether execution is currently blocked.',
+    hint2: 'A simple version can ignore calls while waiting. More advanced versions support trailing calls too.',
     answer: `function throttle(fn, delay) {
   let waiting = false
 
@@ -692,253 +496,90 @@ const handleSelect = useCallback((id: string) => {
     }, delay)
   }
 }`,
-    takeaway: 'Throttle limits execution frequency. Debounce waits until calls stop.',
+    takeaway: 'Throttle limits frequency. Debounce waits for the burst to stop.',
   },
   {
-    id: 'drill-group-by',
-    type: 'drill',
-    category: 'Drills',
-    difficulty: 2,
-    minutes: 5,
-    prompt: 'Implement groupBy(items, keyFn).',
-    hint1: 'Reduce into an object or Map.',
-    hint2: 'Initialize the array for a key before pushing into it.',
-    answer: `function groupBy(items, keyFn) {
-  return items.reduce((acc, item) => {
-    const key = keyFn(item)
-    if (!acc[key]) acc[key] = []
-    acc[key].push(item)
-    return acc
-  }, {})
-}`,
-    takeaway: 'Many array interview problems are careful accumulation plus good initialization.',
-  },
-  {
-    id: 'drill-useeffect-cleanup',
+    id: 'drill-useprevious',
     type: 'drill',
     category: 'Drills',
     difficulty: 2,
     minutes: 4,
-    prompt: 'Write a useEffect that starts an interval and cleans it up correctly.',
-    hint1: 'Return a cleanup function from useEffect.',
-    hint2: 'If the effect depends on changing values, think about stale closures or dependencies.',
-    answer: `useEffect(() => {
-  const id = setInterval(() => {
-    console.log('tick')
-  }, 1000)
+    prompt: 'Implement a simple usePrevious hook.',
+    hint1: 'You need a ref so the value survives renders without causing new ones.',
+    hint2: 'Update the ref in an effect after render, then return the previous value.',
+    answer: `function usePrevious(value) {
+  const ref = useRef()
 
-  return () => clearInterval(id)
-}, [])`,
-    takeaway: 'A lot of React bugs come from timers, listeners, or subscriptions that are never cleaned up.',
+  useEffect(() => {
+    ref.current = value
+  }, [value])
+
+  return ref.current
+}`,
+    takeaway: 'Refs are useful for remembering values across renders without re-rendering.',
   },
   {
-    id: 'drill-flatten-array',
+    id: 'drill-click-outside',
     type: 'drill',
     category: 'Drills',
-    difficulty: 1,
-    minutes: 3,
-    prompt: 'Flatten an array one level deep without using Array.prototype.flat.',
-    hint1: 'Iterate and push into a new array.',
-    hint2: 'If the current item is an array, spread or loop its contents into the output.',
-    answer: `function flattenOneLevel(items) {
-  const result = []
-
-  for (const item of items) {
-    if (Array.isArray(item)) {
-      result.push(...item)
-    } else {
-      result.push(item)
+    difficulty: 2,
+    minutes: 5,
+    prompt: 'Sketch a useClickOutside hook for a popover or dropdown.',
+    hint1: 'Listen on document and check whether the target is inside the referenced element.',
+    hint2: 'Do cleanup correctly so listeners do not leak.',
+    answer: `function useClickOutside(ref, onOutsideClick) {
+  useEffect(() => {
+    function handlePointerDown(event) {
+      if (!ref.current) return
+      if (ref.current.contains(event.target)) return
+      onOutsideClick()
     }
-  }
 
-  return result
+    document.addEventListener('pointerdown', handlePointerDown)
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown)
+    }
+  }, [ref, onOutsideClick])
 }`,
-    takeaway: 'Array interview questions usually reward clarity over cleverness.',
+    takeaway: 'This is a clean interview example for effects, refs, DOM APIs, and cleanup.',
   },
   {
-    id: 'web3-wallet-connection-flow',
-    type: 'qa',
-    category: 'Web3',
-    difficulty: 2,
-    minutes: 3,
-    question: 'How do you think about wallet connection flow in a frontend app?',
-    shortAnswer:
-      'I think about it as a UX state machine: disconnected, connecting, connected, wrong network, signing, and error states. The goal is to make those states explicit and trustworthy instead of treating wallet connection like a single button click.',
-    deepAnswer:
-      'Wallet connection is not just “click connect.” It involves provider availability, user approval, account state, chain state, rejected requests, and sometimes mobile wallet quirks. A good frontend makes these states visible and predictable, because users are dealing with money and trust-sensitive actions. I want the UI to distinguish between disconnected, connected but wrong chain, signing, pending transaction, and failed/rejected states. If the app treats all of that as one vague connected state, users lose confidence fast.',
-    takeaway: 'Wallet UX is really state management plus trust design.',
-  },
-  {
-    id: 'web3-chain-switching',
-    type: 'qa',
-    category: 'Web3',
-    difficulty: 2,
-    minutes: 2,
-    question: 'How do you handle chain switching in a web3 app?',
-    shortAnswer:
-      'I treat wrong-chain state explicitly in the UI and guide the user toward switching, rather than letting actions fail mysteriously. The app should know what chain it expects and surface that clearly before the user tries to transact.',
-    deepAnswer:
-      'Chain switching is both a technical and UX problem. Technically, the app needs to know the active chain and whether the wallet matches the expected environment. From a UX perspective, the app should not wait until a write fails to tell the user they are on the wrong chain. I prefer to surface wrong-network state early, provide a clear switch action when possible, and handle rejection/errors cleanly if the wallet refuses or the chain is not available. Interviewers usually want to hear that you think beyond the happy path.',
-    takeaway: 'Wrong-network state should be first-class, not an afterthought.',
-    followUps: [
-      {
-        question: 'What should the UI do before a write if the user is on the wrong chain?',
-        answer:
-          'Surface the mismatch clearly and guide the user to switch before they attempt the action. It is much better to prevent confusion than let the write fail downstream.',
-      },
-      {
-        question: 'How do you handle a rejected chain switch?',
-        answer:
-          'Treat it like a normal user decision, not an exceptional catastrophe. Keep the UI clear about what is blocked and let them retry when they are ready.',
-      },
-      {
-        question: 'When should chain mismatch block interaction completely?',
-        answer:
-          'When the action would be invalid or misleading on the wrong network, especially for writes. For safe reads or educational views, you may allow browsing with a clear warning.',
-      },
-    ],
-  },
-  {
-    id: 'web3-transaction-lifecycle',
-    type: 'qa',
-    category: 'Web3',
+    id: 'drill-tabs-a11y',
+    type: 'drill',
+    category: 'Drills',
     difficulty: 3,
-    minutes: 4,
-    question: 'How do you think about transaction lifecycle in the frontend?',
-    shortAnswer:
-      'I treat it as multiple explicit states: preparing, awaiting signature, submitted, pending confirmation, confirmed, and failed. Users need to know exactly where they are in that flow.',
-    deepAnswer:
-      'A common mistake is collapsing the whole transaction lifecycle into “loading” and “done.” That hides what is actually happening and makes the app feel untrustworthy. The user needs to know whether they are being asked to sign, whether the transaction was submitted to the network, whether it is still pending, and whether final confirmation happened. Frontends should also distinguish rejection by the user from network failure or onchain failure. In a money or web3 product, transaction clarity is a core UX requirement, not polish.',
-    sampleCode: `type TxState =
-  | 'idle'
-  | 'awaiting-signature'
-  | 'submitted'
-  | 'confirming'
-  | 'confirmed'
-  | 'failed'`,
-    takeaway: 'Transaction UX should make the lifecycle explicit, not vague.',
-    followUps: [
-      {
-        question: 'Why is submitted different from confirmed?',
-        answer:
-          'Submitted means the transaction was handed off to the network. Confirmed means it was actually included and finalized enough for the product to trust it. Those are very different user states.',
-      },
-      {
-        question: 'How would you communicate user rejection versus network failure?',
-        answer:
-          'I would separate them clearly in copy and state. User rejection is a normal intentional action. Network failure is an external problem. If you lump them together, users get confused about what actually happened.',
-      },
-      {
-        question: 'Would you show optimistic success before confirmation?',
-        answer:
-          'Usually no for anything trust-sensitive. I might show a pending success state, but I would avoid telling the user the action is complete before the network actually confirms it.',
-      },
-    ],
+    minutes: 6,
+    prompt: 'What would you build into an accessible tabs component?',
+    hint1: 'Think semantics, keyboard behavior, and state wiring, not just visuals.',
+    hint2: 'Buttons, roving focus or tab order, aria-selected, aria-controls, and clear active panel state.',
+    answer: `Core pieces:
+- Use buttons for the tabs
+- Track activeTabId in state
+- Each tab gets aria-selected and aria-controls
+- Each panel gets role="tabpanel" and is labelled by its tab
+- Support keyboard navigation with ArrowLeft / ArrowRight / Home / End
+- Preserve visible focus states`,
+    takeaway: 'Accessibility questions often reward structured thinking more than perfect memorization.',
   },
   {
-    id: 'web3-optimistic-ui',
-    type: 'qa',
-    category: 'Web3',
-    difficulty: 2,
-    minutes: 3,
-    question: 'Would you use optimistic UI in a web3 app?',
-    shortAnswer:
-      'Sometimes, but carefully. I would use optimism more for low-risk UI feedback than for pretending an onchain action is final before confirmation. In trust-sensitive flows, clarity beats fake speed.',
-    deepAnswer:
-      'Optimistic UI can make an app feel faster, but onchain actions are messy because submission is not the same as confirmation. I might optimistically reflect a local pending state, disable duplicate actions, or show the user that their intent has been captured. But I would not present a transaction as final just because the wallet call returned. In web3 and money-adjacent products, I care more about making pending state clear than making the UI look artificially fast.',
-    takeaway: 'Optimism is fine for intent/pending state, not for pretending settlement already happened.',
-  },
-  {
-    id: 'web3-rpc-failures',
-    type: 'qa',
-    category: 'Web3',
-    difficulty: 2,
-    minutes: 3,
-    question: 'How do you handle RPC failures or unreliable chain reads?',
-    shortAnswer:
-      'I assume they will happen. The frontend should handle retries, stale data messaging, and degraded states cleanly instead of pretending the chain is always available.',
-    deepAnswer:
-      'RPC failures are normal enough that the UI should be designed around them. Reads can fail, lag, or disagree across providers, so I want clear loading and retry behavior, plus a good sense of when the displayed data was last updated. Depending on the product, I might want multiple providers, caching, or fallback reads. Most importantly, I do not want silent failure or confusing empty states that look like real data. The question is not whether failures happen, but whether the app handles them like an adult.',
-    takeaway: 'Chain reliability is a product concern, not just an infra concern.',
-  },
-  {
-    id: 'web3-indexer-vs-direct-read',
-    type: 'qa',
-    category: 'Web3',
-    difficulty: 3,
-    minutes: 4,
-    question: 'When would you use an indexer vs direct onchain reads?',
-    shortAnswer:
-      'Direct reads are great for simple, current onchain data. Indexers make more sense when you need historical views, aggregation, search, richer queryability, or better performance across large datasets.',
-    deepAnswer:
-      'Direct reads are appealing because they are simple and close to the source of truth, but they do not scale well for complex history views, leaderboard-style queries, or anything requiring cross-entity aggregation. Indexers are valuable when the product needs richer query patterns, denormalized data, or fast historical exploration. The tradeoff is that indexers add infrastructure and potential lag behind chain truth. A strong answer shows you understand that this is a product/data-shape tradeoff, not just a technical preference.',
-    takeaway: 'Use direct reads for simple live chain access. Use indexers when the product needs history, aggregation, or fast queryability.',
-    followUps: [
-      {
-        question: 'What product features push you toward an indexer?',
-        answer:
-          'Historical views, rich search, aggregated dashboards, feeds, leaderboards, and anything that requires joining or reshaping large amounts of onchain data usually push me toward an indexer.',
-      },
-      {
-        question: 'What are the risks of relying on an indexer?',
-        answer:
-          'Lag, extra infrastructure, additional failure modes, and sometimes disagreement with raw chain truth. You gain query power, but you add another system that can drift or break.',
-      },
-      {
-        question: 'When is a direct read enough?',
-        answer:
-          'When the data need is simple, current, and low-volume, like reading balances, contract state, or straightforward user-specific information directly from the chain.',
-      },
-    ],
-  },
-  {
-    id: 'web3-contract-hooks-architecture',
-    type: 'qa',
-    category: 'Web3',
-    difficulty: 2,
-    minutes: 3,
-    question: 'How would you structure contract reads and writes in a React app?',
-    shortAnswer:
-      'I usually want a clean boundary between low-level contract interaction and UI components. Components should consume hooks or domain helpers rather than embedding raw contract logic everywhere.',
-    deepAnswer:
-      'If every component calls raw contract functions directly, the codebase gets repetitive and fragile quickly. I prefer a small contract/domain layer or custom hooks that standardize reads, writes, parameter formatting, error handling, and lifecycle state. Then UI components can focus on rendering and interaction instead of knowing every contract detail. That also makes future migrations, testing, and consistency much easier.',
-    takeaway: 'Push raw contract details down into reusable hooks or domain utilities.',
-  },
-  {
-    id: 'drill-format-transaction-state',
+    id: 'drill-event-delegation',
     type: 'drill',
     category: 'Drills',
     difficulty: 2,
     minutes: 4,
-    prompt: 'Model a simple transaction state machine for a frontend and list the states you would track.',
-    hint1: 'Think beyond loading/success/error.',
-    hint2: 'Include user rejection and pending confirmation separately.',
-    answer: `type TransactionState =
-  | 'idle'
-  | 'awaiting-signature'
-  | 'rejected'
-  | 'submitted'
-  | 'confirming'
-  | 'confirmed'
-  | 'failed'`,
-    takeaway: 'Money-adjacent UX gets much better when the lifecycle is explicit.',
-  },
-  {
-    id: 'drill-group-transactions',
-    type: 'drill',
-    category: 'Drills',
-    difficulty: 2,
-    minutes: 5,
-    prompt: 'Given an array of transactions, group them by status.',
-    hint1: 'This is another reduce problem.',
-    hint2: 'Initialize the array for a status before pushing into it.',
-    answer: `function groupTransactionsByStatus(transactions) {
-  return transactions.reduce((acc, tx) => {
-    if (!acc[tx.status]) acc[tx.status] = []
-    acc[tx.status].push(tx)
-    return acc
-  }, {})
-}`,
-    takeaway: 'A lot of interview coding questions repeat the same accumulation patterns in different clothes.',
+    prompt: 'You have a large list of action buttons that can be added dynamically. How would you handle clicks efficiently?',
+    hint1: 'You do not need one listener per child.',
+    hint2: 'Attach one listener to an ancestor and resolve the clicked element with closest().',
+    answer: `container.addEventListener('click', (event) => {
+  const target = event.target
+  const actionButton = target instanceof HTMLElement
+    ? target.closest('[data-action]')
+    : null
+
+  if (!actionButton) return
+  const action = actionButton.getAttribute('data-action')
+  handleAction(action)
+})`,
+    takeaway: 'Event delegation is a nice DOM answer because it shows model knowledge plus practicality.',
   },
 ]
