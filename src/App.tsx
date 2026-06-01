@@ -27,10 +27,35 @@ function initialTheme(): Theme {
 }
 
 function App() {
-  const [mode, setMode] = useState<Mode>('stack')
+  const [mode, setMode] = useState<Mode>(() => {
+    try {
+      const saved = localStorage.getItem('study-cards-mode') as Mode | null
+      if (saved === 'stack' || saved === 'feed' || saved === 'arcade' || saved === 'mock') return saved
+    } catch {
+      /* ignore */
+    }
+    return 'stack'
+  })
   const [theme, setTheme] = useState<Theme>(initialTheme)
-  const [sort, setSort] = useState<Sort>('default')
-  const [filter, setFilter] = useState<Category | 'All'>('All')
+  const [sort, setSort] = useState<Sort>(() => {
+    try {
+      const saved = localStorage.getItem('study-cards-sort') as Sort | null
+      if (saved === 'default' || saved === 'shuffle' || saved === 'difficulty') return saved
+    } catch {
+      /* ignore */
+    }
+    return 'default'
+  })
+  const [filter, setFilter] = useState<Category | 'All'>(() => {
+    try {
+      const saved = localStorage.getItem('study-cards-filter')
+      if (saved === 'All') return 'All'
+      if (saved && CATEGORIES.includes(saved as Category)) return saved as Category
+    } catch {
+      /* ignore */
+    }
+    return 'All'
+  })
   const [cmdkOpen, setCmdkOpen] = useState(false)
   const [idx, setIdx] = useState<number>(() => {
     try {
@@ -68,6 +93,30 @@ function App() {
       /* ignore */
     }
   }, [idx])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('study-cards-mode', mode)
+    } catch {
+      /* ignore */
+    }
+  }, [mode])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('study-cards-sort', sort)
+    } catch {
+      /* ignore */
+    }
+  }, [sort])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('study-cards-filter', filter)
+    } catch {
+      /* ignore */
+    }
+  }, [filter])
 
   const filteredCards = useMemo<StudyCard[]>(() => {
     let list = STUDY_CARDS.slice()
